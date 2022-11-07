@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request
-from controllers.busca import efetuarBusca
+# from controllers.busca import efetuarBusca
 
 
 main = Blueprint('home', __name__, template_folder='templates')
