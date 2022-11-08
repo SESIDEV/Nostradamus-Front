@@ -7,3 +7,5 @@
 ## Estrutura de pastas
 
 - BluePrints
+
+Não usar esses commits.
