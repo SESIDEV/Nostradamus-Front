@@ -15,9 +15,9 @@ include 'layout/header.html' %} {% block content%}
         <small style="font-size: 15px">
           <div class="input-group">
             <form style="align-items: center; display: flex">
-              <input type="text" class="form-control" aria-describedby="button-addon2"
+              <input type="text" class="form-control" aria-describedby="search-button"
                 style="height: 38px; font-size: 15px" name="search" />
-              <button class="btn btn-outline-dark" style="margin-left: 15px" type="submit" id="button-addon2"
+              <button class="btn btn-outline-dark" style="margin-left: 15px" type="submit" id="search-button"
                 style="height: 30px; font-size: 15px; color: white">
                 Buscar
               </button>
@@ -160,7 +160,7 @@ include 'layout/header.html' %} {% block content%}
 
 </div>
 
-<script type="text/javascript" defer>
+{# <script type="text/javascript" defer>
   let dadosAnos = {{ total_anos | tojson }};
   let totalAssuntos = {{ total_assuntos | tojson}}
   let totalNgramas = {{ resultados_ngramas | tojson }}
@@ -295,5 +295,5 @@ include 'layout/header.html' %} {% block content%}
   setDadosAnos();
   mostrarGraficoLinha();
   mostrarGraficoTreemap();
-</script>
+</script> #}
 {% endblock %}

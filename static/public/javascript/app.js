@@ -1,3 +1,5 @@
+let search_temp;
+
 //Efeito Máquina de escrever
 function typeWrite(elemento) {
   const textoArray = elemento.innerHTML.split("");
@@ -22,6 +24,8 @@ function show_anything(evento) {
   let alerta = document.querySelector("#alerta");
   let springerlink = document.querySelector("#id-springerlink").checked;
   let sciencedirect = document.querySelector("#id-sciencedirect").checked;
+  let buscarapida = document.querySelector("#id-busca-rapida").checked;
+  let bases = [];
   const div_mensagem = document.querySelector("#alerta-mensagem");
 
   if (valor_input.value == "") {
@@ -38,9 +42,48 @@ function show_anything(evento) {
     pre_loader.classList.remove("hidden-anything");
     pre_loader.classList.add("show-anything");
   }
+
+  if (springerlink) {
+    bases.push("springerlink")
+  }
+  if (sciencedirect) {
+    bases.push("sciencedirect")
+  }
+
+  search_temp = runRequest(valor_input.value, bases, buscarapida)
 }
-const btn = document.querySelector("#button-addon2");
+const btn = document.querySelector("#search-button");
 btn.addEventListener("click", show_anything, false);
+
+function runRequest(termo, bases, buscaRapida) {
+  let server_req = "http://127.0.0.1:5001"
+  let baseDadosStr = ""
+  let buscaRapidaStr = ""
+  let restoBuscaStr = ""
+
+  // http://127.0.0.1:5001/search?search=ancient&springerlink=true&sciencedirect=true
+  if (bases.includes("springerlink")) {
+    baseDadosStr += "&springerlink=true" 
+  }
+
+  if (bases.includes("sciencedirect")) {
+    baseDadosStr += "&sciencedirect=true"
+  }
+
+  if (buscaRapida == true) {
+    buscaRapidaStr += "&busca-rapida=true"
+  }
+
+  restoBuscaStr = restoBuscaStr + buscaRapidaStr + baseDadosStr
+  
+  search_temp = fetchAsync(server_req + "/search?search=" + termo + restoBuscaStr)
+}
+
+async function fetchAsync(url) {
+  let response = await fetch(url);
+  let data = await response.json();
+  return data;
+}
 
 //arrasta e solta JS
 function allowDrop(ev) {
