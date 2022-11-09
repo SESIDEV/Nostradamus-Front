@@ -216,3 +216,41 @@ function anteriorGraficoTreemapDL() {
     parseDados(printResult());
   }  
 }
+
+var rand = function() {
+  return Math.random().toString(36).substring(2)
+}
+
+function retornarToken() {
+  token = rand() + rand() + rand()
+  return token
+}
+
+function efetuarBusca() {
+  let springerlink = document.querySelector("#id-springerlink").checked
+  let sciencedirect = document.querySelector("#id-sciencedirect").checked
+  let buscaRapida = document.querySelector("#id-busca-rapida").checked
+  let slStr = "&springerlink=true"
+  let sdStr = "&sciencedirect=true"
+  let buscaRapidaStr = "&busca-rapida=true"
+  let strBusca = "busca="
+  let termo = document.querySelector("#id-search").value
+
+  strBusca += termo
+
+  if (springerlink) {
+    strBusca += slStr
+  }
+
+  if (sciencedirect) {
+    strBusca += sdStr
+  }
+
+  if (buscaRapida) {
+    strBusca += buscaRapidaStr
+  }
+  
+  fetch("http://127.0.0.1:5001/search?" + strBusca)
+  .then((response) => response.json())
+  .then((data) => console.log(data))
+}
