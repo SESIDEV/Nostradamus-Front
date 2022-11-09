@@ -24,7 +24,7 @@ def busca():
     if termo != None and termo != "":
         # resultados = efetuarBusca(termo, busca_rapida, bases_selecionadas) # RETORNA UMA TUPLA (resultado_ngramas, artigos_em_string_json)
         # return render_template("content/result.html", termo=termo, resultados_ngramas=resultados[0], dados_das_buscas=resultados[1], total_assuntos=resultados[2], total_anos=resultados[3])
-        pass
+        return render_template("content/result.html")
     else:
         return render_template("content/search.html")
 
