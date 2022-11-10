@@ -120,6 +120,21 @@
   font-size: 15px;
 }
 
+.restore-search-button {
+  height: 40px;
+  width: 160px;
+  font-size: 15px;
+}
+
+.restore-search-bar {
+  display: block;
+  height: 40px;
+  width: 120px;
+  margin-right: 10px;
+  font-size: 15px;
+  margin-bottom: 0.2em;
+}
+
 .titulo-principal:after {
   content: "|";
   opacity: 1;

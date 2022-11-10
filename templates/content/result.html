@@ -6,7 +6,8 @@ include 'layout/header.html' %} {% block content%}
       <a href="#" class="list-group-item list-group-item-action" style="background-color: #ffc107" aria-current="true">
         <div class="d-flex w-100 justify-content-between">
           <h5 class="mb-1" style="font-size: 15px">
-            O termo de busca foi: {{ termo }}
+            O termo de busca foi: 
+            <div id="token-busca">{{token}}</div>
           </h5>
         </div>
         <p class="mb-2" style="font-size: 15px">
@@ -27,20 +28,20 @@ include 'layout/header.html' %} {% block content%}
       </a>
 
       <a href="#" class="list-group-item list-group-item-action mt-3">
-        <div>
+        <div onload="returnBusca()">
           <h2 class="mb-1" style="font-size: 15px">Anos de Publicação</h2>
           <p class="mb-1" style="font-size: 15px">
             Quantidade de Artigos por Ano de Publicação:
           </p>
-          <span class="anos-pub">
-            {% for ano in total_anos %}
+          <span class="anos-pub" id="#location-anos">
+            <!-- {% for ano in total_anos %}
             <button type="button" class="btn btn-warning position-relative mt-3 mx-2 p-1" style="font-size: 15px">
               {{ ano[0] }}
               <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                 {{ ano[1] }}
               </span>
             </button>
-            {% endfor %}
+            {% endfor %} -->
           </span>
         </div>
       </a>

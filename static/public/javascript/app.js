@@ -1,66 +1,83 @@
+let dadosBuscaEfetuada
+
+function buscarAtravesToken() {
+  let token = document.querySelector("#token-busca").innerText
+  resultadoBusca = realizarConsulta(token)
+}
+
+function criarAnos() {
+  let location = document.querySelector("#location-anos")
+  let buttonAno = document.createElement("button")
+
+  buttonAno.setAttribute("type", "button")
+  buttonAno.classList.add("btn", "btn-warning", "position-relative", "mt-3", "mx-2", "p-1")
+  buttonAno.setAttribute("style", "font-size: 15px")
+}
+
 //Efeito Máquina de escrever
 function typeWrite(elemento) {
-  const textoArray = elemento.innerHTML.split("");
-  elemento.innerHTML = " ";
+  const textoArray = elemento.innerHTML.split("")
+  elemento.innerHTML = " "
   textoArray.forEach(function (letra, i) {
     setTimeout(function () {
-      elemento.innerHTML += letra;
-    }, 150 * i);
-  });
+      elemento.innerHTML += letra
+    }, 150 * i)
+  })
 }
+
 try {
-  const titulo = document.querySelector(".titulo-principal");
-  window.onload = typeWrite(titulo); 
+  const titulo = document.querySelector(".titulo-principal")
+  window.onload = typeWrite(titulo)
 } catch {
   console.log("Título Principal não está disponível ou alcançável...\nVocê abriu esta página diretamente?")
 }
 
 //PréLoader
 function show_anything(evento) {
-  let valor_input = document.querySelector("#id-search");
-  let pre_loader = document.querySelector("#preloader");
-  let alerta = document.querySelector("#alerta");
-  let springerlink = document.querySelector("#id-springerlink").checked;
-  let sciencedirect = document.querySelector("#id-sciencedirect").checked;
-  const div_mensagem = document.querySelector("#alerta-mensagem");
+  let valor_input = document.querySelector("#id-search")
+  let pre_loader = document.querySelector("#preloader")
+  let alerta = document.querySelector("#alerta")
+  let springerlink = document.querySelector("#id-springerlink").checked
+  let sciencedirect = document.querySelector("#id-sciencedirect").checked
+  const div_mensagem = document.querySelector("#alerta-mensagem")
 
   if (valor_input.value == "") {
-    evento.preventDefault();
-    alerta.classList.remove("hidden-anything");
-    alerta.classList.add("show-anything");
-    div_mensagem.innerHTML = `É necessário informar algum termo no campo de busca, exemplo: <strong>Technology</strong>`;
+    evento.preventDefault()
+    alerta.classList.remove("hidden-anything")
+    alerta.classList.add("show-anything")
+    div_mensagem.innerHTML = `É necessário informar algum termo no campo de busca, exemplo: <strong>Technology</strong>`
   } else if (springerlink == false && sciencedirect == false) {
-    evento.preventDefault();
-    alerta.classList.remove("hidden-anything");
-    alerta.classList.add("show-anything");
-    div_mensagem.innerHTML = `É necessário escolher uma base de dados!`;
+    evento.preventDefault()
+    alerta.classList.remove("hidden-anything")
+    alerta.classList.add("show-anything")
+    div_mensagem.innerHTML = `É necessário escolher uma base de dados!`
   } else {
-    pre_loader.classList.remove("hidden-anything");
-    pre_loader.classList.add("show-anything");
+    pre_loader.classList.remove("hidden-anything")
+    pre_loader.classList.add("show-anything")
   }
 }
-const btn = document.querySelector("#button-addon2");
-btn.addEventListener("click", show_anything, false);
+const btn = document.querySelector("#button-addon2")
+btn.addEventListener("click", show_anything, false)
 
 //arrasta e solta JS
 function allowDrop(ev) {
-  ev.preventDefault();
+  ev.preventDefault()
 }
 
 function drag(ev) {
-  ev.dataTransfer.setData("text/plain", ev.target.id);
+  ev.dataTransfer.setData("text/plain", ev.target.id)
 }
 
 function drop(ev) {
-  ev.preventDefault();
-  let data = ev.dataTransfer.getData("text");
-  ev.target.appendChild(document.getElementById(data));
+  ev.preventDefault()
+  let data = ev.dataTransfer.getData("text")
+  ev.target.appendChild(document.getElementById(data))
 }
 
-let classificationBoxId = 0;
+let classificationBoxId = 0
 
 function createClassification() {
-  let location = document.querySelector("#location-classification");
+  let location = document.querySelector("#location-classification")
   let boxClassification = document.createElement("div")
   let headerClassification = document.createElement("div")
   let nameClassification = document.createElement("input")
@@ -99,7 +116,7 @@ function createClassification() {
   classificationBoxId += 1
 }
 
-let indiceDownloadTreemap = 0;
+let indiceDownloadTreemap = 0
 
 function printResult() {
 
@@ -109,11 +126,11 @@ function printResult() {
   allBoxList.forEach((elem) => {
 
     let valores = []
-    let titulo = elem.childNodes[0].childNodes[0].value;
+    let titulo = elem.childNodes[0].childNodes[0].value
     let conteudos = elem.childNodes[1].childNodes
-    
+
     conteudos.forEach((elem) => {
-      let texto = elem.childNodes[1].innerText;
+      let texto = elem.childNodes[1].innerText
       let quantidade = elem.childNodes[3].innerText
       let addValores = [texto, quantidade]
       valores.push(addValores)
@@ -127,36 +144,36 @@ function printResult() {
     listaValores.push(classificacao)
   })
 
-return listaValores
+  return listaValores
 }
 
 function generateZIP() {
-  console.log('TEST');
-  var zip = new JSZip();
-  var count = 0;
-  var zipFilename = "Pictures.zip";
+  console.log('TEST')
+  var zip = new JSZip()
+  var count = 0
+  var zipFilename = "Pictures.zip"
 
   links.forEach(function (url, i) {
-    var filename = links[i];
-    filename = filename.replace(/[\/\*\|\:\<\>\?\"\\]/gi, '').replace("httpsi.imgur.com","");
+    var filename = links[i]
+    filename = filename.replace(/[\/\*\|\:\<\>\?\"\\]/gi, '').replace("httpsi.imgur.com", "")
     // loading a file and add it in a zip file
     JSZipUtils.getBinaryContent(url, function (err, data) {
       if (err) {
-        throw err; // or handle the error
+        throw err // or handle the error
       }
-      zip.file(filename, data, { binary: true });
-      count++;
+      zip.file(filename, data, { binary: true })
+      count++
       if (count == links.length) {
         zip.generateAsync({ type: 'blob' }).then(function (content) {
-          saveAs(content, zipFilename);
-        });
+          saveAs(content, zipFilename)
+        })
       }
-    });
-  });
+    })
+  })
 }
 
 function baixarGraficos() {
-  alert("Aguarde. Todos os TreeMaps serão baixados individualmente.");
+  alert("Aguarde. Todos os TreeMaps serão baixados individualmente.")
   Highcharts.charts.forEach(chart => {
     chart.exportChart()
   })
@@ -185,39 +202,39 @@ function mostrarGraficoTreemapDownload(nomeClassificacao, objetosTreemap) {
     title: {
       text: nomeClassificacao
     }
-  });  
+  })
 }
 
 function parseDados(resultados) {
-  let objetosTreemap = [];
-  let nomeClassificacao;
+  let objetosTreemap = []
+  let nomeClassificacao
 
   let elem = resultados[indiceDownloadTreemap]
 
   nomeClassificacao = elem['Classificação']
   for (let i = 0; i < elem['Termos'].length; i++) {
-    objetosTreemap.push({name: elem['Termos'][i][0], value: parseInt(elem['Termos'][i][1]), colorValue: parseInt(elem['Termos'][i][1])})
+    objetosTreemap.push({ name: elem['Termos'][i][0], value: parseInt(elem['Termos'][i][1]), colorValue: parseInt(elem['Termos'][i][1]) })
   }
-  
-  mostrarGraficoTreemapDownload(nomeClassificacao, objetosTreemap);
+
+  mostrarGraficoTreemapDownload(nomeClassificacao, objetosTreemap)
 }
 
 function proximoGraficoTreemapDL() {
-  qtdBoxClassification = document.querySelectorAll(`.box-classification`).length;
+  qtdBoxClassification = document.querySelectorAll(`.box-classification`).length
   if (indiceDownloadTreemap < qtdBoxClassification) {
-    indiceDownloadTreemap += 1;
-    parseDados(printResult());
-  }  
+    indiceDownloadTreemap += 1
+    parseDados(printResult())
+  }
 }
 
 function anteriorGraficoTreemapDL() {
   if (indiceDownloadTreemap > 0) {
-    indiceDownloadTreemap -= 1;
-    parseDados(printResult());
-  }  
+    indiceDownloadTreemap -= 1
+    parseDados(printResult())
+  }
 }
 
-var rand = function() {
+var rand = function () {
   return Math.random().toString(36).substring(2)
 }
 
@@ -225,6 +242,22 @@ function retornarToken() {
   token = rand() + rand() + rand()
   return token
 }
+
+function grabBusca() {
+  dadosBuscaEfetuada = localStorage.getItem("data")
+}
+
+// https://nostradamus.up.railway.app/consulta?token=6143942
+
+function returnBusca() {
+  for (let i = 0; i < dadosBuscaEfetuada.length; i++) {
+    let conteudo = dadosBuscaEfetuada[i]
+    console.log(conteudo)
+    outrasCoisas.push(conteudo)
+  }
+}
+
+
 
 function efetuarBusca() {
   let springerlink = document.querySelector("#id-springerlink").checked
@@ -249,8 +282,32 @@ function efetuarBusca() {
   if (buscaRapida) {
     strBusca += buscaRapidaStr
   }
-  
-  fetch("http://127.0.0.1:5001/search?" + strBusca)
-  .then((response) => response.json())
-  .then((data) => console.log(data))
+
+  // fetch("http://127.0.0.1:5001/search?" + strBusca)
+  //   .then((response) => response.json())
+  //   .then((data) => {
+  //     localStorage.setItem("data", JSON.stringify(data))
+  //     window.location.href = "/result"
+  //   })
 }
+
+
+
+async function realizarConsulta(tokenPesquisa) {
+  link_consulta = "https://nostradamus.up.railway.app/consulta?token=" + tokenPesquisa
+  const busca_resgatada = await fetch(link_consulta).then((response) => {
+    return response.json().then(
+      (data) => {
+        console.log(data)
+        return data
+      })
+  })
+  return busca_resgatada
+}
+
+function puxarResultado() {
+  let token = document.querySelector("#id-search-restore").value
+  window.location.href = "/result?token=" + token
+}
+
+buscarAtravesToken()

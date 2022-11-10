@@ -31,8 +31,18 @@ def busca():
 
 @main.route("/search-restore")
 def recuperarBusca():
-    return render_template("content/result.html")
+    termo = request.args.get("busca-token") # lembrar de renomear
+    if termo != None and termo != "":
+        # resultados = efetuarBusca(termo, busca_rapida, bases_selecionadas) # RETORNA UMA TUPLA (resultado_ngramas, artigos_em_string_json)
+        # return render_template("content/result.html", termo=termo, resultados_ngramas=resultados[0], dados_das_buscas=resultados[1], total_assuntos=resultados[2], total_anos=resultados[3])
+        return render_template("content/result.html")
+    else:
+        return render_template("content/search-restore.html")
 
 @main.route("/result")
 def resultado():
-    return render_template("content/search.html")
+    token = request.args.get("token")
+    if (token):
+        return render_template("content/result.html", token=token)
+    else:
+        return render_template("content/result.html", token="")
