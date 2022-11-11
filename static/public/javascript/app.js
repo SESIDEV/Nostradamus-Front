@@ -261,8 +261,8 @@ async function efetuarBusca() {
   let springerlink = document.querySelector("#id-springerlink").checked
   let sciencedirect = document.querySelector("#id-sciencedirect").checked
   let buscaRapida = document.querySelector("#id-busca-rapida").checked
-  let slStr = "&springerlink=true"
-  let sdStr = "&sciencedirect=true"
+  let stringSpringerlink = "&springerlink=true"
+  let stringSciencedirect = "&sciencedirect=true"
   let buscaRapidaStr = "&busca-rapida=true"
   let strBusca = "busca="
   let termo = document.querySelector("#id-search").value
@@ -270,11 +270,11 @@ async function efetuarBusca() {
   strBusca += termo
 
   if (springerlink) {
-    strBusca += slStr
+    strBusca += stringSpringerlink
   }
 
   if (sciencedirect) {
-    strBusca += sdStr
+    strBusca += stringSciencedirect
   }
 
   if (buscaRapida) {
@@ -283,7 +283,7 @@ async function efetuarBusca() {
 
   let link_busca = "https://nostradamus.up.railway.app/search?" + strBusca
   
-  promise = retornarQualquerJsonEmpromise(link_busca)
+  promise = retornarQualquerJsonEmPromise(link_busca)
 
   promise.then((dados) => {
     window.location.pathname = '/result?token=' + dados['token']
@@ -310,10 +310,10 @@ function retornarTodosOsDadosDePesquisa() {
 
 async function realizarConsulta(tokenPesquisa) {
   link_consulta = "https://nostradamus.up.railway.app/consulta?token=" + tokenPesquisa
-  return retornarQualquerJsonEmpromise(link_consulta)
+  return retornarQualquerJsonEmPromise(link_consulta)
 }
 
-async function retornarQualquerJsonEmpromise(link) {
+async function retornarQualquerJsonEmPromise(link) {
   return await fetch(link).then((response) => {return response.json()})
 }
   //return valor
