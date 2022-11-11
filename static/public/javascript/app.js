@@ -339,7 +339,8 @@ function retornarTodosOsDadosDePesquisa() {
     resultadoBuscaEmPromisse = realizarConsulta(token)
     resultadoBuscaEmPromisse.then((dados) => {
       if (dados.resposta){
-        return dados.resposta
+        console.log(dados.resposta)
+        alert(dados.resposta)
       }
       else {
         temp = dados
