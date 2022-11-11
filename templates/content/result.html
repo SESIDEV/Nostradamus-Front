@@ -1,7 +1,9 @@
 {% extends 'layout/layout.html' %} {% block title %} Resultado {% endblock %} {%
 include 'layout/header.html' %} {% block content%}
 <script>
-  window.onload = retornarTodosOsDadosDePesquisa()
+window.addEventListener('load', function () {
+  retornarTodosOsDadosDePesquisa()
+}) 
 </script>
 <div class="result-style background-nostradamus row">
   <div class="col-3 border border-dark border-round p-1">
