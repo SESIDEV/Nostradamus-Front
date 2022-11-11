@@ -286,7 +286,7 @@ async function efetuarBusca() {
   promise = retornarQualquerJsonEmPromise(link_busca)
 
   promise.then((dados) => {
-    window.location.pathname = '/result?token=' + dados['token']
+    window.location = '/result?token=' + dados['token']
   });
 }
 
@@ -316,4 +316,3 @@ async function realizarConsulta(tokenPesquisa) {
 async function retornarQualquerJsonEmPromise(link) {
   return await fetch(link).then((response) => {return response.json()})
 }
-  //return valor
