@@ -296,7 +296,7 @@ function retornarQueryDoNavegador(name){
 
 function retornarTodosOsDadosDePesquisa() {
   let token = retornarQueryDoNavegador('token')
-  document.querySelector("#id-search-restore").value = token
+  document.querySelector("#token-busca").innerHTML = token
 
   resultadoBusca = realizarConsulta(token)
   //a variavel acima contem um promisse; a partir deste ponto o promisse precisará ser tratando dentro do método .then
