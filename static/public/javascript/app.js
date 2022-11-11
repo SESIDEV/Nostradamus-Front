@@ -257,12 +257,6 @@ var rand = function () {
   return Math.random().toString(36).substring(2)
 }
 
-function retornarToken() {
-  token = rand() + rand() + rand()
-  return token
-}
-
-
 async function efetuarBusca() {
   let springerlink = document.querySelector("#id-springerlink").checked
   let sciencedirect = document.querySelector("#id-sciencedirect").checked
@@ -289,34 +283,37 @@ async function efetuarBusca() {
 
   let link_busca = "https://nostradamus.up.railway.app/search?" + strBusca
   
-  retornarQualquerJson(link_busca)
+  promisse = retornarQualquerJsonEmPromisse(link_busca)
 
+  promisse.then((dados) => {
+    window.location.pathname = '/result?token=' + dados['token']
+  });
 }
 
-function retornarQuery(name){
+function buscarToken(){
+  let token = document.querySelector("#consultaToken")
+  window.location.pathname = '/result?token=' + token
+}
+
+function retornarQueryDoNavegador(name){
   if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
     return decodeURIComponent(name[1]);
 }
 
-function buscarAtravesToken() {
-  let token = retornarQuery('token')
-  resultadoBusca = realizarConsulta(token)
+function retornarTodosOsDadosDePesquisa() {
+  let token = retornarQueryDoNavegador('token')
   document.querySelector("#id-search-restore").value = token
+
+  resultadoBusca = realizarConsulta(token)
+  //a variavel acima contem um promisse; a partir deste ponto o promisse precisará ser tratando dentro do método .then
 }
 
 async function realizarConsulta(tokenPesquisa) {
   link_consulta = "https://nostradamus.up.railway.app/consulta?token=" + tokenPesquisa
-  dadosPesquisa = retornarQualquerJson(link_consulta)
+  return retornarQualquerJsonEmPromisse(link_consulta)
 }
 
-async function retornarQualquerJson(link) {
-  const valor = await fetch(link)
-    .then((response) => {
-      return response.json()
-    })
-    .then((responseData) => {
-      console.log(responseData)
-      return responseData
-    })
+async function retornarQualquerJsonEmPromisse(link) {
+  return await fetch(link).then((response) => {return response.json()})
 }
   //return valor
