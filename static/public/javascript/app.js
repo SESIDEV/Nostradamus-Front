@@ -5,13 +5,34 @@ function buscarAtravesToken() {
   resultadoBusca = realizarConsulta(token)
 }
 
+
 function criarAnos() {
-  let location = document.querySelector("#location-anos")
+  let locationAno = document.querySelector("#location-anos")
   let buttonAno = document.createElement("button")
+  let spanNumero = document.createElement("span")
 
   buttonAno.setAttribute("type", "button")
   buttonAno.classList.add("btn", "btn-warning", "position-relative", "mt-3", "mx-2", "p-1")
   buttonAno.setAttribute("style", "font-size: 15px")
+  buttonAno.innerHTML = `2012` // TODO: Colocar o ano aqui (um loop irá realizar essa tarefa)
+  buttonAno.setAttribute("id", "id-button-" + '2')
+
+  spanNumero.classList.add("position-absolute", "top-0", "start-100", "translate-middle", "badge", "rounded-pill", "bg-danger")
+  spanNumero.innerHTML = `4` // TODO: Colocar a quantidade relativa ao ano aqui (um loop irá realizar essa tarefa)
+
+  buttonAno.innerHTML += spanNumero.outerHTML
+
+  locationAno.append(buttonAno)
+
+
+  // <!-- {% for ano in total_anos %}
+  // <button type="button" class="btn btn-warning position-relative mt-3 mx-2 p-1" style="font-size: 15px">
+  //   {{ ano[0] }}
+  //   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+  //     {{ ano[1] }}
+  //   </span>
+  // </button>
+  // {% endfor %} -->
 }
 
 //Efeito Máquina de escrever
