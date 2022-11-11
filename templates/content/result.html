@@ -1,5 +1,8 @@
 {% extends 'layout/layout.html' %} {% block title %} Resultado {% endblock %} {%
 include 'layout/header.html' %} {% block content%}
+<script>
+  window.onload = retornarTodosOsDadosDePesquisa()
+</script>
 <div class="result-style background-nostradamus row">
   <div class="col-3 border border-dark border-round p-1">
     <div class="list-group" style="background-color: rgba(255, 255, 255, 0.2)">
@@ -28,7 +31,7 @@ include 'layout/header.html' %} {% block content%}
       </a>
 
       <a href="#" class="list-group-item list-group-item-action mt-3">
-        <div onload="retornarTodosOsDadosDePesquisa()">
+        <div>
           <h2 class="mb-1" style="font-size: 15px">Anos de Publicação</h2>
           <p class="mb-1" style="font-size: 15px">
             Quantidade de Artigos por Ano de Publicação:
