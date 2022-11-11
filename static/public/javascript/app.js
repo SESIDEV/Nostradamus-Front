@@ -231,12 +231,6 @@ var rand = function () {
   return Math.random().toString(36).substring(2)
 }
 
-function retornarToken() {
-  token = rand() + rand() + rand()
-  return token
-}
-
-
 async function efetuarBusca() {
   let springerlink = document.querySelector("#id-springerlink").checked
   let sciencedirect = document.querySelector("#id-sciencedirect").checked
@@ -263,7 +257,12 @@ async function efetuarBusca() {
 
   let link_busca = "https://nostradamus.up.railway.app/search?" + strBusca
   
-  retornarQualquerJson(link_busca)
+  promisse = retornarQualquerJsonEmPromisse(link_busca)
+
+  promisse.then((dados) => {
+    window.location.pathname = '/result?token=' + dados['token']
+  });
+  
 
 }
 
@@ -280,18 +279,15 @@ function buscarAtravesToken() {
 
 async function realizarConsulta(tokenPesquisa) {
   link_consulta = "https://nostradamus.up.railway.app/consulta?token=" + tokenPesquisa
-    retornarQualquerJson(link_consulta)
+  return retornarQualquerJson(link_consulta)
 }
 
-async function retornarQualquerJson(link) {
-
-  const valor = await fetch(link).then((response) => {
-    return response.json().then(
-      (data) => {
-        console.log(data)
-        return data
-      })
-  })
-  return valor
-
+async function retornarQualquerJsonEmPromisse(link) {
+  return await fetch(link).then((response) => {return response.json()})
 }
+
+function printarDadosPromisse(promisse) {
+  promisse.then((dados) => {
+    console.log(dados);
+  });
+};
