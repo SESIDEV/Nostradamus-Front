@@ -283,9 +283,9 @@ async function efetuarBusca() {
 
   let link_busca = "https://nostradamus.up.railway.app/search?" + strBusca
   
-  promisse = retornarQualquerJsonEmPromisse(link_busca)
+  promise = retornarQualquerJsonEmpromise(link_busca)
 
-  promisse.then((dados) => {
+  promise.then((dados) => {
     window.location.pathname = '/result?token=' + dados['token']
   });
 }
@@ -305,15 +305,15 @@ function retornarTodosOsDadosDePesquisa() {
   document.querySelector("#id-search-restore").value = token
 
   resultadoBusca = realizarConsulta(token)
-  //a variavel acima contem um promisse; a partir deste ponto o promisse precisará ser tratando dentro do método .then
+  //a variavel acima contem um promise; a partir deste ponto o promise precisará ser tratando dentro do método .then
 }
 
 async function realizarConsulta(tokenPesquisa) {
   link_consulta = "https://nostradamus.up.railway.app/consulta?token=" + tokenPesquisa
-  return retornarQualquerJsonEmPromisse(link_consulta)
+  return retornarQualquerJsonEmpromise(link_consulta)
 }
 
-async function retornarQualquerJsonEmPromisse(link) {
+async function retornarQualquerJsonEmpromise(link) {
   return await fetch(link).then((response) => {return response.json()})
 }
   //return valor
