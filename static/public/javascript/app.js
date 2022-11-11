@@ -282,32 +282,26 @@ async function efetuarBusca() {
   promisse.then((dados) => {
     window.location.pathname = '/result?token=' + dados['token']
   });
-  
-
 }
 
-function retornarQuery(name){
+function retornarQueryDoNavegador(name){
   if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
     return decodeURIComponent(name[1]);
 }
 
-function buscarAtravesToken() {
-  let token = retornarQuery('token')
-  resultadoBusca = realizarConsulta(token)
+function retornarTodosOsDadosDePesquisa() {
+  let token = retornarQueryDoNavegador('token')
   document.querySelector("#id-search-restore").value = token
+
+  resultadoBusca = realizarConsulta(token)
+  //tratar 
 }
 
 async function realizarConsulta(tokenPesquisa) {
   link_consulta = "https://nostradamus.up.railway.app/consulta?token=" + tokenPesquisa
-  return retornarQualquerJson(link_consulta)
+  return retornarQualquerJsonEmPromisse(link_consulta)
 }
 
 async function retornarQualquerJsonEmPromisse(link) {
   return await fetch(link).then((response) => {return response.json()})
 }
-
-function printarDadosPromisse(promisse) {
-  promisse.then((dados) => {
-    console.log(dados);
-  });
-};
