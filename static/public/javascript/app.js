@@ -338,10 +338,10 @@ function retornarTodosOsDadosDePesquisa() {
   if (token) {
     resultadoBuscaEmPromisse = realizarConsulta(token)
     resultadoBuscaEmPromisse.then((dados) => {
-      if (dados === 'ongoing' || dados === 'not ready'){
-        return dados
+      if (dados.resposta){
+        return dados.resposta
       }
-      else{
+      else {
         temp = dados
         popularPainelAnos(dados)
       } 
