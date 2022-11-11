@@ -7,7 +7,7 @@ include 'layout/header.html' %} {% block content%}
         <div class="d-flex w-100 justify-content-between">
           <h5 class="mb-1" style="font-size: 15px">
             O termo de busca foi: 
-            <div id="token-busca">{{token}}</div>
+            <div id="token-busca"></div>
           </h5>
         </div>
         <p class="mb-2" style="font-size: 15px">
@@ -28,7 +28,7 @@ include 'layout/header.html' %} {% block content%}
       </a>
 
       <a href="#" class="list-group-item list-group-item-action mt-3">
-        <div onload="returnBusca()">
+        <div onload="buscarAtravesToken()">
           <h2 class="mb-1" style="font-size: 15px">Anos de Publicação</h2>
           <p class="mb-1" style="font-size: 15px">
             Quantidade de Artigos por Ano de Publicação:
