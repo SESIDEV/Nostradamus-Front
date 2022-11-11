@@ -284,6 +284,11 @@ async function efetuarBusca() {
   });
 }
 
+function buscarToken(){
+  let token = document.querySelector("#consultaToken")
+  window.location.pathname = '/result?token=' + token
+}
+
 function retornarQueryDoNavegador(name){
   if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
     return decodeURIComponent(name[1]);
@@ -294,7 +299,7 @@ function retornarTodosOsDadosDePesquisa() {
   document.querySelector("#id-search-restore").value = token
 
   resultadoBusca = realizarConsulta(token)
-  //tratar 
+  //a variavel acima contem um promisse; a partir deste ponto o promisse precisará ser tratando dentro do método .then
 }
 
 async function realizarConsulta(tokenPesquisa) {
