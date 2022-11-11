@@ -1,6 +1,6 @@
 let temp;
 
-function criarAnos(dados) {
+function popularPainelAnos(dados) {
   let locationAno = document.querySelector("#location-anos")
   let buttonAno = document.createElement("button")
   let spanNumero = document.createElement("span")
@@ -14,13 +14,54 @@ function criarAnos(dados) {
     buttonAno.setAttribute("id", "id-button-" + idx)
 
     spanNumero.classList.add("position-absolute", "top-0", "start-100", "translate-middle", "badge", "rounded-pill", "bg-danger")
-    spanNumero.innerHTML = ano[1] // TODO: Colocar a quantidade relativa ao ano aqui (um loop irá realizar essa tarefa)
+    spanNumero.innerHTML = ano[1]
 
     buttonAno.innerHTML += spanNumero.outerHTML
 
     locationAno.append(buttonAno)
     idx++
   })
+}
+
+function popularPainelNgramas(dados) {
+  let locationNgramas = document.querySelector("#location-ngramas")
+  let buttonNgrama = document.createElement("button")
+  let spanNgrama = document.createElement("span")
+  let spanQtdNgrama = document.createElement("span")
+
+  let idx = 0;
+  dados['resultado_ngramas'].forEach((nGrama) => {
+    //console.log(elem, buttonNgrama)
+    buttonNgrama.setAttribute("type", "button")
+    buttonNgrama.classList.add("btn", "btn-warning", "position-relative","mt-3","mx-2","p-1")
+    buttonNgrama.setAttribute("style", "font-size: 15px")
+    buttonNgrama.setAttribute("id", idx)
+    buttonNgrama.setAttribute("draggable", "true")
+    buttonNgrama.setAttribute("ondragstart", "drag(event)")
+
+    spanNgrama.innerHTML = nGrama[0][0] + " " + nGrama[0][1]
+
+    spanQtdNgrama.classList.add("position-absolute", "top-0", "start-100", "translate-middle", "badge", "rounded-pill", "bg-light", "text-dark")
+    spanQtdNgrama.innerHTML = nGrama[1]
+
+    buttonNgrama.innerHTML += spanNgrama.outerHTML
+    buttonNgrama.innerHTML += spanQtdNgrama.outerHTML
+
+    console.log(buttonNgrama)
+
+    locationNgramas.append(buttonNgrama)
+    idx++
+  })
+
+  // <!-- {% for ngrama in resultados_ngramas %}
+  // <button type="button" class="btn btn-warning position-relative mt-3 mx-2 p-1" style="font-size: 15px"
+  //   id="{{loop.index}}" draggable="true" ondragstart="drag(event)">
+  //   <span>{{ ngrama[0][0] }} {{ ngrama[0][1] }}</span>
+  //   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light text-dark">
+  //     {{ ngrama[1] }}
+  //   </span>
+  // </button>
+  // {% endfor %} -->
 }
 
 //Efeito Máquina de escrever
@@ -298,7 +339,7 @@ function retornarTodosOsDadosDePesquisa() {
     resultadoBuscaEmPromisse = realizarConsulta(token)
     resultadoBuscaEmPromisse.then((dados) => {
       temp = dados
-      criarAnos(dados)
+      popularPainelAnos(dados)
     })
   }
 }
