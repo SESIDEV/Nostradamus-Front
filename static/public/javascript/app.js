@@ -1,36 +1,26 @@
-let dadosPesquisa;
+let temp;
 
-function criarAnos() {
+function criarAnos(dados) {
   let locationAno = document.querySelector("#location-anos")
   let buttonAno = document.createElement("button")
   let spanNumero = document.createElement("span")
 
-  dadosPesquisa.forEach((elem) => {
-    console.log(elem)
+  let idx = 0;
+  dados['total_anos'].forEach((ano) => {
+    buttonAno.setAttribute("type", "button")
+    buttonAno.classList.add("btn", "btn-warning", "position-relative", "mt-3", "mx-2", "p-1")
+    buttonAno.setAttribute("style", "font-size: 15px")
+    buttonAno.innerHTML = parseInt(ano[0])
+    buttonAno.setAttribute("id", "id-button-" + idx)
+
+    spanNumero.classList.add("position-absolute", "top-0", "start-100", "translate-middle", "badge", "rounded-pill", "bg-danger")
+    spanNumero.innerHTML = ano[1] // TODO: Colocar a quantidade relativa ao ano aqui (um loop irá realizar essa tarefa)
+
+    buttonAno.innerHTML += spanNumero.outerHTML
+
+    locationAno.append(buttonAno)
+    idx++
   })
-
-  buttonAno.setAttribute("type", "button")
-  buttonAno.classList.add("btn", "btn-warning", "position-relative", "mt-3", "mx-2", "p-1")
-  buttonAno.setAttribute("style", "font-size: 15px")
-  buttonAno.innerHTML = `2012` // TODO: Colocar o ano aqui (um loop irá realizar essa tarefa)
-  buttonAno.setAttribute("id", "id-button-" + '2')
-
-  spanNumero.classList.add("position-absolute", "top-0", "start-100", "translate-middle", "badge", "rounded-pill", "bg-danger")
-  spanNumero.innerHTML = `4` // TODO: Colocar a quantidade relativa ao ano aqui (um loop irá realizar essa tarefa)
-
-  buttonAno.innerHTML += spanNumero.outerHTML
-
-  locationAno.append(buttonAno)
-
-
-  // <!-- {% for ano in total_anos %}
-  // <button type="button" class="btn btn-warning position-relative mt-3 mx-2 p-1" style="font-size: 15px">
-  //   {{ ano[0] }}
-  //   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-  //     {{ ano[1] }}
-  //   </span>
-  // </button>
-  // {% endfor %} -->
 }
 
 //Efeito Máquina de escrever
@@ -304,12 +294,13 @@ function retornarTodosOsDadosDePesquisa() {
   let token = retornarQueryDoNavegador('token')
   document.querySelector("#token-busca").innerHTML = token
 
-  resultadoBuscaEmPromisse = realizarConsulta(token)
-  //a variavel acima contem um promise
-  //a partir deste ponto o promise precisará ser tratando dentro do método .then
-  resultadoBuscaEmPromisse.then((dados) => {
-    console.log(dados)
-  })
+  if (token) {
+    resultadoBuscaEmPromisse = realizarConsulta(token)
+    resultadoBuscaEmPromisse.then((dados) => {
+      temp = dados
+      criarAnos(dados)
+    })
+  }
 }
 
 async function realizarConsulta(tokenPesquisa) {
