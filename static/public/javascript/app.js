@@ -263,15 +263,7 @@ async function efetuarBusca() {
 
   let link_busca = "https://nostradamus.up.railway.app/search?" + strBusca
   
-  const busca_realizada = await fetch(link_busca).then((response) =>
-  {
-    return response.then(
-      (data) => {
-        console.log(data)
-        return data
-      })
-  })
-  return busca_realizada
+  retornarQualquerJson(link_busca)
 
 }
 
@@ -288,13 +280,18 @@ function buscarAtravesToken() {
 
 async function realizarConsulta(tokenPesquisa) {
   link_consulta = "https://nostradamus.up.railway.app/consulta?token=" + tokenPesquisa
-  
-  const busca_resgatada = await fetch(link_consulta).then((response) => {
+    retornarQualquerJson(link_consulta)
+}
+
+async function retornarQualquerJson(link) {
+
+  const valor = await fetch(link).then((response) => {
     return response.json().then(
       (data) => {
         console.log(data)
         return data
       })
   })
-  return busca_resgatada
+  return valor
+
 }
