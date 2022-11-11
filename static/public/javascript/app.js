@@ -1,7 +1,13 @@
+let dadosPesquisa;
+
 function criarAnos() {
   let locationAno = document.querySelector("#location-anos")
   let buttonAno = document.createElement("button")
   let spanNumero = document.createElement("span")
+
+  dadosPesquisa.forEach((elem) => {
+    console.log(elem)
+  })
 
   buttonAno.setAttribute("type", "button")
   buttonAno.classList.add("btn", "btn-warning", "position-relative", "mt-3", "mx-2", "p-1")
@@ -300,18 +306,17 @@ function buscarAtravesToken() {
 
 async function realizarConsulta(tokenPesquisa) {
   link_consulta = "https://nostradamus.up.railway.app/consulta?token=" + tokenPesquisa
-    retornarQualquerJson(link_consulta)
+  dadosPesquisa = retornarQualquerJson(link_consulta)
 }
 
 async function retornarQualquerJson(link) {
-
-  const valor = await fetch(link).then((response) => {
-    return response.json().then(
-      (data) => {
-        console.log(data)
-        return data
-      })
-  })
-  return valor
-
+  const valor = await fetch(link)
+    .then((response) => {
+      return response.json()
+    })
+    .then((responseData) => {
+      console.log(responseData)
+      return responseData
+    })
 }
+  //return valor
