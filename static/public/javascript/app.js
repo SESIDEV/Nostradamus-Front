@@ -1,10 +1,3 @@
-let dadosBuscaEfetuada
-
-function buscarAtravesToken() {
-  let token = document.querySelector("#token-busca").innerText
-  resultadoBusca = realizarConsulta(token)
-}
-
 function criarAnos() {
   let location = document.querySelector("#location-anos")
   let buttonAno = document.createElement("button")
@@ -243,23 +236,8 @@ function retornarToken() {
   return token
 }
 
-function grabBusca() {
-  dadosBuscaEfetuada = localStorage.getItem("data")
-}
 
-// https://nostradamus.up.railway.app/consulta?token=6143942
-
-function returnBusca() {
-  for (let i = 0; i < dadosBuscaEfetuada.length; i++) {
-    let conteudo = dadosBuscaEfetuada[i]
-    console.log(conteudo)
-    outrasCoisas.push(conteudo)
-  }
-}
-
-
-
-function efetuarBusca() {
+async function efetuarBusca() {
   let springerlink = document.querySelector("#id-springerlink").checked
   let sciencedirect = document.querySelector("#id-sciencedirect").checked
   let buscaRapida = document.querySelector("#id-busca-rapida").checked
@@ -283,18 +261,34 @@ function efetuarBusca() {
     strBusca += buscaRapidaStr
   }
 
-  // fetch("http://127.0.0.1:5001/search?" + strBusca)
-  //   .then((response) => response.json())
-  //   .then((data) => {
-  //     localStorage.setItem("data", JSON.stringify(data))
-  //     window.location.href = "/result"
-  //   })
+  let link_busca = "https://nostradamus.up.railway.app/search?" + strBusca
+  
+  const busca_realizada = await fetch(link_busca).then((response) =>
+  {
+    return response.then(
+      (data) => {
+        console.log(data)
+        return data
+      })
+  })
+  return busca_realizada
+
 }
 
+function retornarQuery(name){
+  if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+    return decodeURIComponent(name[1]);
+}
 
+function buscarAtravesToken() {
+  let token = retornarQuery('token')
+  resultadoBusca = realizarConsulta(token)
+  document.querySelector("#id-search-restore").value = token
+}
 
 async function realizarConsulta(tokenPesquisa) {
   link_consulta = "https://nostradamus.up.railway.app/consulta?token=" + tokenPesquisa
+  
   const busca_resgatada = await fetch(link_consulta).then((response) => {
     return response.json().then(
       (data) => {
@@ -304,10 +298,3 @@ async function realizarConsulta(tokenPesquisa) {
   })
   return busca_resgatada
 }
-
-function puxarResultado() {
-  let token = document.querySelector("#id-search-restore").value
-  window.location.href = "/result?token=" + token
-}
-
-buscarAtravesToken()
