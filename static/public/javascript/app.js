@@ -304,8 +304,12 @@ function retornarTodosOsDadosDePesquisa() {
   let token = retornarQueryDoNavegador('token')
   document.querySelector("#token-busca").innerHTML = token
 
-  resultadoBusca = realizarConsulta(token)
-  //a variavel acima contem um promise; a partir deste ponto o promise precisará ser tratando dentro do método .then
+  resultadoBuscaEmPromisse = realizarConsulta(token)
+  //a variavel acima contem um promise
+  //a partir deste ponto o promise precisará ser tratando dentro do método .then
+  resultadoBuscaEmPromisse.then((dados) => {
+    console.log(dados)
+  })
 }
 
 async function realizarConsulta(tokenPesquisa) {
