@@ -1,4 +1,4 @@
-let temp;
+let temp; // Variável para testes
 
 function popularPainelAnos(dados) {
   let locationAno = document.querySelector("#location-anos")
@@ -23,7 +23,7 @@ function popularPainelAnos(dados) {
   })
 }
 
-function popularPainelNgramas(dados) {
+function popularPainelNgramas(dados) { // Verificar funcionamento
   let locationNgramas = document.querySelector("#location-ngramas")
   let buttonNgrama = document.createElement("button")
   let spanNgrama = document.createElement("span")
@@ -47,7 +47,7 @@ function popularPainelNgramas(dados) {
     buttonNgrama.innerHTML += spanNgrama.outerHTML
     buttonNgrama.innerHTML += spanQtdNgrama.outerHTML
 
-    console.log(buttonNgrama)
+    console.log("BTNNGRAM:", buttonNgrama) // TODO: Remover
 
     locationNgramas.append(buttonNgrama)
     idx++
@@ -62,6 +62,47 @@ function popularPainelNgramas(dados) {
   //   </span>
   // </button>
   // {% endfor %} -->
+}
+
+function popularPainelSubjects(dados) {
+  let locationSubjects = document.querySelector("#location-subjects")
+  let buttonSubject = document.createElement("button")
+  let spanSubject = document.createElement("span")
+  let spanQtdSubject = document.createElement("span")
+
+  let idx = 0;
+  dados['total_assuntos'].forEach((assunto) => {
+    buttonSubject.setAttribute("type", "button")
+    buttonSubject.classList.add("btn", "btn-light", "position-relative", "mt-3", "mx-2", "p-1")
+    buttonSubject.setAttribute("style", "font-size: 15px")
+    buttonSubject.setAttribute("id", idx)
+    buttonSubject.setAttribute("draggable", "true")
+    buttonSubject.setAttribute("ondragstart", "drag(event)")
+
+    spanSubject.innerHTML = `testContent` // TODO: Verificar conteúdo e atribuir de acordo com a var assunto
+
+    spanQtdSubject.classList.add("position-absolute", "top-0", "start-100", "translate-middle", "badge", "rounded-pill", "bg-warning", "text-dark")
+    spanQtdSubject.innerHTML = `4` // TODO: Verificar conteúdo...
+
+    buttonSubject.innerHTML += spanSubject.outerHTML
+    buttonSubject.innerHTML += spanQtdSubject.outerHTML
+
+    console.log("BTNSBJCT:", buttonSubject) // TODO: Remover
+
+    locationSubjects.append(buttonSubject)
+    idx++
+  }) 
+
+  // {# {% for assunto in total_assuntos %}
+  //         <button type="button" class="btn btn-light position-relative mt-3 mx-2 p-1" style="font-size: 15px"
+  //           id="assunto_{{loop.index}}" draggable="true" ondragstart="drag(event)">
+  //           {{ assunto[0] }}
+  //           <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
+  //             {{ assunto[1] }}
+  //           </span>
+  //         </button>
+  //         {% endfor %} #}
+  //       </div>
 }
 
 //Efeito Máquina de escrever
@@ -343,8 +384,10 @@ function retornarTodosOsDadosDePesquisa() {
         alert(dados.resposta)
       }
       else {
-        temp = dados
+        temp = dados // TODO: Remover, atribui dados a uma variável para testes
         popularPainelAnos(dados)
+        popularPainelNgramas(dados)
+        popularPainelSubjects(dados)
       } 
     })
   }
