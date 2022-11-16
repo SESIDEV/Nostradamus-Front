@@ -1,7 +1,7 @@
 {% extends 'layout/layout.html' %} {% block title %} Resultado {% endblock %} {%
 include 'layout/header.html' %} {% block content%}
 <script>
-window.addEventListener('load', function () {
+window.addEventListener('load', function() {
   retornarTodosOsDadosDePesquisa()
 }) 
 </script>
@@ -11,8 +11,8 @@ window.addEventListener('load', function () {
       <a href="#" class="list-group-item list-group-item-action" style="background-color: #ffc107" aria-current="true">
         <div class="d-flex w-100 justify-content-between">
           <h5 class="mb-1" style="font-size: 15px">
-            O termo de busca foi: 
-            <h5 id="token-busca"></h5>
+            O token da busca realizada foi: 
+            <nobr style="font-weight: bold;"id="token-busca"></nobr>
           </h5>
         </div>
         <p class="mb-2" style="font-size: 15px">
@@ -145,6 +145,29 @@ window.addEventListener('load', function () {
               ◀</button>
                 <button type="button" class="btn btn-primary" onclick="proximoGraficoTreemapDL()">▶</button>
                 <button type="button" class="btn btn-warning" data-bs-dismiss="modal">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Fim do modal -->
+  </div>
+
+  <div id="janela-busca-pendente">
+    <!-- Modal -->
+    <div class="modal fade" style="backdrop-filter: blur(5px)" id="modal-busca-pendente" tabindex="-1"
+      aria-labelledby="label-modal-busca-pendente" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="label-modal-busca-pendente">Busca Pendente </h1>
+            <button type="button" class="btn-close" onclick="esconderModal()" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="texto-modal">
+            <br style="display: none;">
+            Efetuando busca...
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-warning" onclick="recarregarBusca()">Recarregar</button>
           </div>
         </div>
       </div>

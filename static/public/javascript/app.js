@@ -1,4 +1,6 @@
 let temp; // Variável para testes
+let modalBuscaPendente; // Variável para o modal da busca pendente
+
 
 function popularPainelAnos(dados) {
   let locationAno = document.querySelector("#location-anos")
@@ -352,14 +354,15 @@ function retornarTodosOsDadosDePesquisa() {
   document.querySelector("#token-busca").innerHTML = token
 
   if (token) {
-    resultadoBuscaEmPromisse = realizarConsulta(token)
-    resultadoBuscaEmPromisse.then((dados) => {
-      if (dados.resposta){
+    resultadoBuscaEmPromise = realizarConsulta(token) 
+    resultadoBuscaEmPromise.then((dados) => {
+      if (dados['resposta']){
         console.log(dados.resposta)
-        alert(dados.resposta)
+        exibirModal() 
+        atualizarModal()
       }
       else {
-        temp = dados // TODO: Remover, atribui dados a uma variável para testes
+        temp = dados
         popularPainelAnos(dados)
         popularPainelNgramas(dados)
         popularPainelSubjects(dados)
@@ -375,4 +378,31 @@ async function realizarConsulta(tokenPesquisa) {
 
 async function retornarQualquerJsonEmPromise(link) {
   return await fetch(link).then((response) => {return response.json()})
+}
+
+function exibirModal() { // --> Apenas <-- será exibido no promise de uma resposta e NÃO de maneira completamente automática!!
+  modalBuscaPendente = new bootstrap.Modal(document.querySelector("#modal-busca-pendente"), {})
+  modalBuscaPendente.show()
+}
+
+function esconderModal() {
+  modalBuscaPendente.hide()
+}
+
+function atualizarModal() {
+  let textoModal = document.querySelector("#texto-modal")
+  let secs = 5
+  setInterval(() => {
+    textoModal.innerHTML = `Aguarde ` + secs + ` segundos`
+    if (secs >= 1) {
+      secs -= 1
+    } else {
+      textoModal.innerHTML = `Tentando novamente...`
+      //location.reload()
+    }
+  }, 1000)
+}
+
+function recarregarBusca() {
+  location.reload()
 }
