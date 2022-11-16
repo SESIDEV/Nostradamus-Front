@@ -64,7 +64,10 @@ window.addEventListener('load', function () {
       <div class="border border-round border-secondary p-1">
         <div style="margin: 0 auto; background-color: rgba(255, 255, 255, 0.2)" id="location-subjects" ondrop="drop(event)"
           ondragover="allowDrop(event)">
-          {% for assunto in total_assuntos %}
+          <br style="display: none"> <!-- Não remover... -->
+          
+
+          {# {% for assunto in total_assuntos %}
           <button type="button" class="btn btn-light position-relative mt-3 mx-2 p-1" style="font-size: 15px"
             id="assunto_{{loop.index}}" draggable="true" ondragstart="drag(event)">
             {{ assunto[0] }}
@@ -72,7 +75,7 @@ window.addEventListener('load', function () {
               {{ assunto[1] }}
             </span>
           </button>
-          {% endfor %}
+          {% endfor %} #}
         </div>
       </div>
     </div>
