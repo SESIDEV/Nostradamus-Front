@@ -139,7 +139,7 @@ function show_anything(evento) {
     alerta.classList.remove("hidden-anything")
     alerta.classList.add("show-anything")
     div_mensagem.innerHTML = `É necessário informar algum termo no campo de busca, exemplo: <strong>Technology</strong>`
-  } else if (springerlink == false && sciencedirect == false) {
+  } else if ((springerlink == false || springerlink == null) && (sciencedirect == false || sciencedirect == null)) {
     evento.preventDefault()
     alerta.classList.remove("hidden-anything")
     alerta.classList.add("show-anything")
@@ -340,8 +340,8 @@ async function efetuarBusca() {
 }
 
 function buscarToken(){
-  let token = document.querySelector("#consultaToken")
-  window.location.pathname = '/result?token=' + token
+  let token = document.querySelector("#id-search-restore").value
+  window.location = "/result?token=" + token
 }
 
 function retornarQueryDoNavegador(name){
@@ -398,7 +398,7 @@ function atualizarModal() {
       secs -= 1
     } else {
       textoModal.innerHTML = `Tentando novamente...`
-      //location.reload()
+      location.reload()
     }
   }, 1000)
 }
