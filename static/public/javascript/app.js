@@ -54,16 +54,6 @@ function popularPainelNgramas(dados) { // Verificar funcionamento
     locationNgramas.append(buttonNgrama)
     idx++
   })
-
-  // <!-- {% for ngrama in resultados_ngramas %}
-  // <button type="button" class="btn btn-warning position-relative mt-3 mx-2 p-1" style="font-size: 15px"
-  //   id="{{loop.index}}" draggable="true" ondragstart="drag(event)">
-  //   <span>{{ ngrama[0][0] }} {{ ngrama[0][1] }}</span>
-  //   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light text-dark">
-  //     {{ ngrama[1] }}
-  //   </span>
-  // </button>
-  // {% endfor %} -->
 }
 
 function popularPainelSubjects(dados) {
