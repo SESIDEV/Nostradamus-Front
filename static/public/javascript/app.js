@@ -1,4 +1,4 @@
-let temp; // Variável para testes
+let dadosTreemap; // Temporário para popular o treemap de termos
 let modalBuscaPendente; // Variável para o modal da busca pendente
 
 
@@ -349,12 +349,11 @@ function retornarTodosOsDadosDePesquisa() {
         atualizarModal()
       }
       else {
-        temp = dados
+        dadosTreemap = dados // TODO: Mudar futuramente
         popularPainelAnos(dados)
         popularPainelNgramas(dados)
         popularPainelSubjects(dados)
         popularGraficoLinha(dados)
-        popularGraficoTreemap(dados)
       } 
     })
   }
@@ -471,23 +470,25 @@ async function retornarQualquerJsonEmPromise(link) {
   return await fetch(link).then((response) => {return response.json()})
 }
 
-function setTermosTreemap(dados) {
+function setTermosTreemap() {
   let vetorTermosTreemap = [];
 
-  for (let i = 0; i < dados['total_assuntos'].length; i++) {
-    vetorTermosTreemap.push(entradaTreemap(dados['total_assuntos'][i]));
+  for (let i = 0; i < dadosTreemap['total_assuntos'].length; i++) {
+    vetorTermosTreemap.push(entradaTreemap(dadosTreemap['total_assuntos'][i]));
   }
 
   // Coloca os ngramas no vetor de termos Treemap
-  totalNgramas.forEach((termo, qtd) => {
+  dadosTreemap['resultado_ngramas'].forEach((termo, qtd) => {
     vetorTermosTreemap.push(entradaTreemap([termo[0][0] + " " + termo[0][1], qtd]))
   })
 
   return vetorTermosTreemap;
 }
 
-function popularGraficoTreemap(dados) {
-  
+function entradaTreemap(termoDados) {
+  let termo = termoDados[0]
+  let valor = termoDados[1]
+  return { name: termo, value: valor, colorValue: valor };
 }
 
 function exibirModal() { // --> Apenas <-- será exibido no promise de uma resposta e NÃO de maneira completamente automática!!
