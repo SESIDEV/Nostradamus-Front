@@ -50,8 +50,6 @@ function popularPainelNgramas(dados) { // Verificar funcionamento
     buttonNgrama.innerHTML += spanNgrama.outerHTML
     buttonNgrama.innerHTML += spanQtdNgrama.outerHTML
 
-    console.log("BTNNGRAM:", buttonNgrama) // TODO: Remover
-
     locationNgramas.append(buttonNgrama)
     idx++
   })
@@ -347,7 +345,6 @@ function retornarTodosOsDadosDePesquisa() {
     resultadoBuscaEmPromise = realizarConsulta(token) 
     resultadoBuscaEmPromise.then((dados) => {
       if (dados['resposta']){
-        console.log(dados.resposta)
         exibirModal() 
         atualizarModal()
       }
