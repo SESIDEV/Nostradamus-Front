@@ -26,7 +26,7 @@ function popularPainelAnos(dados) {
 }
 
 function popularPainelNgramas(dados) { // Verificar funcionamento
-  let locationNgramas = document.querySelector("#location-ngramas")
+  let locationNgramas = document.querySelector("#local-ngramas")
   let buttonNgrama = document.createElement("button")
   let spanNgrama = document.createElement("span")
   let spanQtdNgrama = document.createElement("span")
@@ -67,7 +67,7 @@ function popularPainelNgramas(dados) { // Verificar funcionamento
 }
 
 function popularPainelSubjects(dados) {
-  let locationSubjects = document.querySelector("#location-subjects")
+  let locationSubjects = document.querySelector("#local-subjects")
   let buttonSubject = document.createElement("button")
   let spanSubject = document.createElement("span")
   let spanQtdSubject = document.createElement("span")
