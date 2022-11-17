@@ -502,7 +502,7 @@ function esconderModal() {
 
 function atualizarModal() {
   let textoModal = document.querySelector("#texto-modal")
-  let secs = 5
+  let secs = 30
   setInterval(() => {
     textoModal.innerHTML = `Aguarde ` + secs + ` segundos`
     if (secs >= 1) {
