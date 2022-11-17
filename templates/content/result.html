@@ -52,7 +52,7 @@ window.addEventListener('load', function() {
     <h1 style="color: white">N-gramas:</h1>
     <div style="height: calc(50vh - 50px); overflow-y: auto; background-color: rgba(255, 255, 255, 0.2);">
       <div class="border border-round border-secondary p-1">
-        <div style="margin: 0 auto; background-color: rgba(255, 255, 255, 0.2)" id="location-ngramas" ondrop="drop(event)"
+        <div style="margin: 0 auto; background-color: rgba(255, 255, 255, 0.2)" id="local-ngramas" ondrop="drop(event)"
           ondragover="allowDrop(event)">
           <br style="display: none"> <!-- Não remover em hipótese alguma, irá quebrar a página -->
         </div>
@@ -62,20 +62,9 @@ window.addEventListener('load', function() {
     <h1 style="color: white">Assuntos (Subjects):</h1>
     <div class="mt-3" style="height: calc(40vh - 50px); overflow-y: auto; background-color: rgba(255, 255, 255, 0.2);">
       <div class="border border-round border-secondary p-1">
-        <div style="margin: 0 auto; background-color: rgba(255, 255, 255, 0.2)" id="location-subjects" ondrop="drop(event)"
+        <div style="margin: 0 auto; background-color: rgba(255, 255, 255, 0.2)" id="local-subjects" ondrop="drop(event)"
           ondragover="allowDrop(event)">
           <br style="display: none"> <!-- Não remover... -->
-          
-
-          {# {% for assunto in total_assuntos %}
-          <button type="button" class="btn btn-light position-relative mt-3 mx-2 p-1" style="font-size: 15px"
-            id="assunto_{{loop.index}}" draggable="true" ondragstart="drag(event)">
-            {{ assunto[0] }}
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
-              {{ assunto[1] }}
-            </span>
-          </button>
-          {% endfor %} #}
         </div>
       </div>
     </div>
