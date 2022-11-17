@@ -27,13 +27,14 @@ function popularPainelAnos(dados) {
 
 function popularPainelNgramas(dados) { // Verificar funcionamento
   let locationNgramas = document.querySelector("#local-ngramas")
-  let buttonNgrama = document.createElement("button")
+  let buttonNgrama;
   let spanNgrama = document.createElement("span")
   let spanQtdNgrama = document.createElement("span")
 
   let idx = 0;
   dados['resultado_ngramas'].forEach((nGrama) => {
     //console.log(elem, buttonNgrama)
+    buttonNgrama = document.createElement("button")
     buttonNgrama.setAttribute("type", "button")
     buttonNgrama.classList.add("btn", "btn-warning", "position-relative","mt-3","mx-2","p-1")
     buttonNgrama.setAttribute("style", "font-size: 15px")
@@ -58,12 +59,13 @@ function popularPainelNgramas(dados) { // Verificar funcionamento
 
 function popularPainelSubjects(dados) {
   let locationSubjects = document.querySelector("#local-subjects")
-  let buttonSubject = document.createElement("button")
+  let buttonSubject;
   let spanSubject = document.createElement("span")
   let spanQtdSubject = document.createElement("span")
 
   let idx = 0;
   dados['total_assuntos'].forEach((assunto) => {
+    buttonSubject = document.createElement("button")
     buttonSubject.setAttribute("type", "button")
     buttonSubject.classList.add("btn", "btn-light", "position-relative", "mt-3", "mx-2", "p-1")
     buttonSubject.setAttribute("style", "font-size: 15px")
@@ -71,15 +73,13 @@ function popularPainelSubjects(dados) {
     buttonSubject.setAttribute("draggable", "true")
     buttonSubject.setAttribute("ondragstart", "drag(event)")
 
-    spanSubject.innerHTML = `testContent` // TODO: Verificar conteúdo e atribuir de acordo com a var assunto
+    spanSubject.innerHTML = assunto[0] // TODO: Verificar conteúdo e atribuir de acordo com a var assunto
 
     spanQtdSubject.classList.add("position-absolute", "top-0", "start-100", "translate-middle", "badge", "rounded-pill", "bg-warning", "text-dark")
-    spanQtdSubject.innerHTML = `4` // TODO: Verificar conteúdo...
+    spanQtdSubject.innerHTML = assunto[1] // TODO: Verificar conteúdo...
 
     buttonSubject.innerHTML += spanSubject.outerHTML
     buttonSubject.innerHTML += spanQtdSubject.outerHTML
-
-    console.log("BTNSBJCT:", buttonSubject) // TODO: Remover
 
     locationSubjects.append(buttonSubject)
     idx++
@@ -213,8 +213,8 @@ function printResult() {
     let conteudos = elem.childNodes[1].childNodes
 
     conteudos.forEach((elem) => {
-      let texto = elem.childNodes[1].innerText
-      let quantidade = elem.childNodes[3].innerText
+      let texto = elem.childNodes[0].innerText // Pode quebrar (antigo valor: 1)
+      let quantidade = elem.childNodes[1].innerText // Pode quebrar (antigo valor: 3)
       let addValores = [texto, quantidade]
       valores.push(addValores)
     })
@@ -356,9 +356,113 @@ function retornarTodosOsDadosDePesquisa() {
         popularPainelAnos(dados)
         popularPainelNgramas(dados)
         popularPainelSubjects(dados)
+        popularGraficoLinha(dados)
+        popularGraficoTreemap(dados)
       } 
     })
   }
+}
+
+// Função para mostrar o gráfico de artigos por ano - gráfico de linha
+function mostrarGraficoLinha(vetorDadosAno) {
+  Highcharts.chart("graficoLinha", {
+    title: {
+      text: "Distribuição de Artigos por Ano",
+    },
+
+    subtitle: {
+      text: 'Fontes: <a href="" target="_blank">ScienceDirect, SpringerLink</a>', // TODO: Linkar as fontes de acordo com a seleção
+    },
+
+    yAxis: {
+      title: {
+        text: "Quantidade de Artigos",
+      },
+    },
+
+    xAxis: {
+      tickInterval: 1,
+      labels: {
+        enabled: true,
+        formatter: function () { return vetorDadosAno[this.value][0]; },
+      }
+    },
+
+    legend: {
+      layout: "vertical",
+      align: "center",
+      verticalAlign: "bottom",
+    },
+
+    plotOptions: {
+      series: {
+        label: {
+          connectorAllowed: false,
+        },
+      },
+    },
+
+    series: [
+      {
+        name: "Artigos",
+        data: vetorDadosAno,
+      },
+    ],
+
+    responsive: {
+      rules: [
+        {
+          condition: {
+            maxWidth: 500,
+          },
+          chartOptions: {
+            legend: {
+              layout: "horizontal",
+              align: "center",
+              verticalAlign: "bottom",
+            },
+          },
+        },
+      ],
+    },
+  });
+}
+
+function mostrarGraficoTreemap() {
+  Highcharts.chart('graficoTreemap', {
+    plotOptions: {
+      treemap: {
+        stacking: 'normal',
+        cropThreshold: 10,
+        dataGrouping: {
+          enabled: true
+        }
+      }
+    },
+    colorAxis: {
+      minColor: '#FFFFFF',
+      maxColor: Highcharts.getOptions().colors[0]
+    },
+    series: [{
+      type: 'treemap',
+      layoutAlgorithm: 'squarified',
+      data: setTermosTreemap()
+    }],
+    title: {
+      text: 'Termos mais relevantes'
+    }
+  });
+}
+
+function popularGraficoLinha(dados){
+  let vetorDadosAno = [];
+
+  // Coloca os dados de artigos/ano no vetorDadosAno
+  for (let i = 0; i < dados['total_anos'].length; i++) {
+    vetorDadosAno.push([dados['total_anos'][i][0], dados['total_anos'][i][1]])
+  }
+
+  mostrarGraficoLinha(vetorDadosAno)
 }
 
 async function realizarConsulta(tokenPesquisa) {
@@ -368,6 +472,25 @@ async function realizarConsulta(tokenPesquisa) {
 
 async function retornarQualquerJsonEmPromise(link) {
   return await fetch(link).then((response) => {return response.json()})
+}
+
+function setTermosTreemap(dados) {
+  let vetorTermosTreemap = [];
+
+  for (let i = 0; i < dados['total_assuntos'].length; i++) {
+    vetorTermosTreemap.push(entradaTreemap(dados['total_assuntos'][i]));
+  }
+
+  // Coloca os ngramas no vetor de termos Treemap
+  totalNgramas.forEach((termo, qtd) => {
+    vetorTermosTreemap.push(entradaTreemap([termo[0][0] + " " + termo[0][1], qtd]))
+  })
+
+  return vetorTermosTreemap;
+}
+
+function popularGraficoTreemap(dados) {
+  
 }
 
 function exibirModal() { // --> Apenas <-- será exibido no promise de uma resposta e NÃO de maneira completamente automática!!
