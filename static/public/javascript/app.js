@@ -38,7 +38,7 @@ function popularPainelNgramas(dados) { // Verificar funcionamento
     buttonNgrama.setAttribute("type", "button")
     buttonNgrama.classList.add("btn", "btn-warning", "position-relative","mt-3","mx-2","p-1")
     buttonNgrama.setAttribute("style", "font-size: 15px")
-    buttonNgrama.setAttribute("id", idx)
+    buttonNgrama.setAttribute("id", "id-ngrama-" + idx)
     buttonNgrama.setAttribute("draggable", "true")
     buttonNgrama.setAttribute("ondragstart", "drag(event)")
 
@@ -67,7 +67,7 @@ function popularPainelSubjects(dados) {
     buttonSubject.setAttribute("type", "button")
     buttonSubject.classList.add("btn", "btn-light", "position-relative", "mt-3", "mx-2", "p-1")
     buttonSubject.setAttribute("style", "font-size: 15px")
-    buttonSubject.setAttribute("id", idx)
+    buttonSubject.setAttribute("id", "id-subject-" + idx)
     buttonSubject.setAttribute("draggable", "true")
     buttonSubject.setAttribute("ondragstart", "drag(event)")
 
@@ -157,7 +157,7 @@ function drop(ev) {
 
 let classificationBoxId = 0
 
-function createClassification() {
+function createClassification(nome) {
   let location = document.querySelector("#location-classification")
   let boxClassification = document.createElement("div")
   let headerClassification = document.createElement("div")
@@ -165,12 +165,24 @@ function createClassification() {
   let bodyClassification = document.createElement("div")
   let footerClassification = document.createElement("div")
   let btnDownloadResult = document.createElement("button")
+  let btnCloseClassification = document.createElement("button")
   let id = classificationBoxId
 
   btnDownloadResult.setAttribute("onclick", `printResult(${id})`)
   btnDownloadResult.setAttribute("id", `btn-download-classification-${id}`)
   btnDownloadResult.classList.add("btn-download-result")
   btnDownloadResult.innerHTML = "Download"
+
+  btnCloseClassification.setAttribute("style", "backdrop-filter: blur(50px)")
+  btnCloseClassification.style.backgroundColor = "#ffc107"
+  btnCloseClassification.style.opacity = 1.0
+  btnCloseClassification.setAttribute("type", "button")
+  btnCloseClassification.classList.add("position-absolute", "top-0", "start-0", "translate-middle", "btn-close")
+  btnCloseClassification.setAttribute("id", `btn-close-classification-${id}`)
+  btnCloseClassification.setAttribute("onclick", "return this.parentNode.remove()")
+  // Procurar forma alternativa de setar o mouse over
+  btnCloseClassification.setAttribute("onmouseover", "this.style.backgroundColor = \"#ffcd39\" ")
+  btnCloseClassification.setAttribute("onmouseout", "this.style.backgroundColor = \"#ffc107\" ")
 
   footerClassification.classList.add("d-flex", "justify-content-end")
 
@@ -186,15 +198,29 @@ function createClassification() {
   nameClassification.setAttribute("id", `nameClassification-${id}`)
   nameClassification.classList.add("d-block", "w-100", "input-name-classification")
 
+  if (nome) {
+    nameClassification.value = nome
+  }
+
   headerClassification.classList.add("card-header", "d-flex", "justify-content-center", "w-100", "classification-header")
   headerClassification.append(nameClassification)
 
   boxClassification.setAttribute("id", `box-classification-${id}`)
   boxClassification.classList.add("card", "border-warning", "mb-3", "mt-3", "box-classification")
-  boxClassification.append(headerClassification, bodyClassification, footerClassification)
+  boxClassification.append(headerClassification, bodyClassification, footerClassification, btnCloseClassification)
 
   location.append(boxClassification)
   classificationBoxId += 1
+}
+
+function deleteClassification() {
+  // TODO
+}
+
+function inicializarClassificationPadrao() {
+  createClassification("Tecnologias")
+  createClassification("Impactos")
+  createClassification("Oportunidades")
 }
 
 let indiceDownloadTreemap = 0
@@ -236,7 +262,7 @@ function baixarGraficos() {
 }
 
 function mostrarGraficoTreemapDownload(nomeClassificacao, objetosTreemap) {
-  Highcharts.chart('graficoTreemapDownload', {
+  let graficoTreemap = Highcharts.chart('graficoTreemapDownload', {
     plotOptions: {
       treemap: {
         stacking: 'normal',
@@ -267,10 +293,20 @@ function parseDados(resultados) {
 
   let elem = resultados[indiceDownloadTreemap]
 
-  nomeClassificacao = elem['Classificação']
+  try {
+    nomeClassificacao = elem['Classificação']
+  }
+  catch {
+    // Por algum motivo em certas ocasiões o nome da classificação fica vazio, vamos então retornar silenciosamente como se nada tivesse acontecido
+    // Funcionalmente não há problemas
+    return ""
+  }
   for (let i = 0; i < elem['Termos'].length; i++) {
     objetosTreemap.push({ name: elem['Termos'][i][0], value: parseInt(elem['Termos'][i][1]), colorValue: parseInt(elem['Termos'][i][1]) })
   }
+
+  let indicador = document.querySelector("#counterTreemap")
+  indicador.innerText = `${indiceDownloadTreemap+1}/${resultados.length}`
 
   mostrarGraficoTreemapDownload(nomeClassificacao, objetosTreemap)
 }
@@ -354,6 +390,7 @@ function retornarTodosOsDadosDePesquisa() {
         popularPainelNgramas(dados)
         popularPainelSubjects(dados)
         popularGraficoLinha(dados)
+        inicializarClassificationPadrao()
       } 
     })
   }
@@ -479,7 +516,7 @@ function setTermosTreemap() {
 
   // Coloca os ngramas no vetor de termos Treemap
   dadosTreemap['resultado_ngramas'].forEach((termo, qtd) => {
-    vetorTermosTreemap.push(entradaTreemap([termo[0][0] + " " + termo[0][1], qtd]))
+    vetorTermosTreemap.push(entradaTreemap([termo[0][0] + " " + termo[0][1], qtd, qtd]))
   })
 
   return vetorTermosTreemap;
