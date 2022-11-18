@@ -114,7 +114,7 @@ window.addEventListener('load', function() {
     <!-- Modal -->
     <div class="modal fade" style="backdrop-filter: blur(5px)" id="modal-download-classificacoes" tabindex="-1"
       aria-labelledby="label-modal-classificacoes" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="label-modal-classificacoes">Treemap das Classificações</h1>
@@ -126,10 +126,11 @@ window.addEventListener('load', function() {
             </figure>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" onclick="anteriorGraficoTreemapDL()">
-              ◀</button>
-                <button type="button" class="btn btn-primary" onclick="proximoGraficoTreemapDL()">▶</button>
-                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">OK</button>
+            <button type="button" style="margin-right: 28em" class="btn btn-primary">Baixar treemap</button>
+            <button type="button" class="btn btn-primary" onclick="anteriorGraficoTreemapDL()">◀</button>
+            <nobr id="counterTreemap">X/X</nobr>
+            <button type="button" class="btn btn-primary" onclick="proximoGraficoTreemapDL()">▶</button>
+            <button type="button" class="btn btn-warning" data-bs-dismiss="modal">OK</button>
           </div>
         </div>
       </div>
