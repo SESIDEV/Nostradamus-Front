@@ -1,4 +1,6 @@
-let temp; // Variável para testes
+let dadosTreemap; // Temporário para popular o treemap de termos
+let modalBuscaPendente; // Variável para o modal da busca pendente
+
 
 function popularPainelAnos(dados) {
   let locationAno = document.querySelector("#location-anos")
@@ -24,18 +26,19 @@ function popularPainelAnos(dados) {
 }
 
 function popularPainelNgramas(dados) { // Verificar funcionamento
-  let locationNgramas = document.querySelector("#location-ngramas")
-  let buttonNgrama = document.createElement("button")
+  let locationNgramas = document.querySelector("#local-ngramas")
+  let buttonNgrama;
   let spanNgrama = document.createElement("span")
   let spanQtdNgrama = document.createElement("span")
 
   let idx = 0;
   dados['resultado_ngramas'].forEach((nGrama) => {
     //console.log(elem, buttonNgrama)
+    buttonNgrama = document.createElement("button")
     buttonNgrama.setAttribute("type", "button")
     buttonNgrama.classList.add("btn", "btn-warning", "position-relative","mt-3","mx-2","p-1")
     buttonNgrama.setAttribute("style", "font-size: 15px")
-    buttonNgrama.setAttribute("id", idx)
+    buttonNgrama.setAttribute("id", "id-ngrama-" + idx)
     buttonNgrama.setAttribute("draggable", "true")
     buttonNgrama.setAttribute("ondragstart", "drag(event)")
 
@@ -47,47 +50,34 @@ function popularPainelNgramas(dados) { // Verificar funcionamento
     buttonNgrama.innerHTML += spanNgrama.outerHTML
     buttonNgrama.innerHTML += spanQtdNgrama.outerHTML
 
-    console.log("BTNNGRAM:", buttonNgrama) // TODO: Remover
-
     locationNgramas.append(buttonNgrama)
     idx++
   })
-
-  // <!-- {% for ngrama in resultados_ngramas %}
-  // <button type="button" class="btn btn-warning position-relative mt-3 mx-2 p-1" style="font-size: 15px"
-  //   id="{{loop.index}}" draggable="true" ondragstart="drag(event)">
-  //   <span>{{ ngrama[0][0] }} {{ ngrama[0][1] }}</span>
-  //   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light text-dark">
-  //     {{ ngrama[1] }}
-  //   </span>
-  // </button>
-  // {% endfor %} -->
 }
 
 function popularPainelSubjects(dados) {
-  let locationSubjects = document.querySelector("#location-subjects")
-  let buttonSubject = document.createElement("button")
+  let locationSubjects = document.querySelector("#local-subjects")
+  let buttonSubject;
   let spanSubject = document.createElement("span")
   let spanQtdSubject = document.createElement("span")
 
   let idx = 0;
   dados['total_assuntos'].forEach((assunto) => {
+    buttonSubject = document.createElement("button")
     buttonSubject.setAttribute("type", "button")
     buttonSubject.classList.add("btn", "btn-light", "position-relative", "mt-3", "mx-2", "p-1")
     buttonSubject.setAttribute("style", "font-size: 15px")
-    buttonSubject.setAttribute("id", idx)
+    buttonSubject.setAttribute("id", "id-subject-" + idx)
     buttonSubject.setAttribute("draggable", "true")
     buttonSubject.setAttribute("ondragstart", "drag(event)")
 
-    spanSubject.innerHTML = `testContent` // TODO: Verificar conteúdo e atribuir de acordo com a var assunto
+    spanSubject.innerHTML = assunto[0] // TODO: Verificar conteúdo e atribuir de acordo com a var assunto
 
     spanQtdSubject.classList.add("position-absolute", "top-0", "start-100", "translate-middle", "badge", "rounded-pill", "bg-warning", "text-dark")
-    spanQtdSubject.innerHTML = `4` // TODO: Verificar conteúdo...
+    spanQtdSubject.innerHTML = assunto[1] // TODO: Verificar conteúdo...
 
     buttonSubject.innerHTML += spanSubject.outerHTML
     buttonSubject.innerHTML += spanQtdSubject.outerHTML
-
-    console.log("BTNSBJCT:", buttonSubject) // TODO: Remover
 
     locationSubjects.append(buttonSubject)
     idx++
@@ -137,7 +127,7 @@ function show_anything(evento) {
     alerta.classList.remove("hidden-anything")
     alerta.classList.add("show-anything")
     div_mensagem.innerHTML = `É necessário informar algum termo no campo de busca, exemplo: <strong>Technology</strong>`
-  } else if (springerlink == false && sciencedirect == false) {
+  } else if ((springerlink == false || springerlink == null) && (sciencedirect == false || sciencedirect == null)) {
     evento.preventDefault()
     alerta.classList.remove("hidden-anything")
     alerta.classList.add("show-anything")
@@ -167,7 +157,7 @@ function drop(ev) {
 
 let classificationBoxId = 0
 
-function createClassification() {
+function createClassification(nome) {
   let location = document.querySelector("#location-classification")
   let boxClassification = document.createElement("div")
   let headerClassification = document.createElement("div")
@@ -175,12 +165,24 @@ function createClassification() {
   let bodyClassification = document.createElement("div")
   let footerClassification = document.createElement("div")
   let btnDownloadResult = document.createElement("button")
+  let btnCloseClassification = document.createElement("button")
   let id = classificationBoxId
 
   btnDownloadResult.setAttribute("onclick", `printResult(${id})`)
   btnDownloadResult.setAttribute("id", `btn-download-classification-${id}`)
   btnDownloadResult.classList.add("btn-download-result")
   btnDownloadResult.innerHTML = "Download"
+
+  btnCloseClassification.setAttribute("style", "backdrop-filter: blur(50px)")
+  btnCloseClassification.style.backgroundColor = "#ffc107"
+  btnCloseClassification.style.opacity = 1.0
+  btnCloseClassification.setAttribute("type", "button")
+  btnCloseClassification.classList.add("position-absolute", "top-0", "start-0", "translate-middle", "btn-close")
+  btnCloseClassification.setAttribute("id", `btn-close-classification-${id}`)
+  btnCloseClassification.setAttribute("onclick", "return this.parentNode.remove()")
+  // Procurar forma alternativa de setar o mouse over
+  btnCloseClassification.setAttribute("onmouseover", "this.style.backgroundColor = \"#ffcd39\" ")
+  btnCloseClassification.setAttribute("onmouseout", "this.style.backgroundColor = \"#ffc107\" ")
 
   footerClassification.classList.add("d-flex", "justify-content-end")
 
@@ -196,15 +198,29 @@ function createClassification() {
   nameClassification.setAttribute("id", `nameClassification-${id}`)
   nameClassification.classList.add("d-block", "w-100", "input-name-classification")
 
+  if (nome) {
+    nameClassification.value = nome
+  }
+
   headerClassification.classList.add("card-header", "d-flex", "justify-content-center", "w-100", "classification-header")
   headerClassification.append(nameClassification)
 
   boxClassification.setAttribute("id", `box-classification-${id}`)
   boxClassification.classList.add("card", "border-warning", "mb-3", "mt-3", "box-classification")
-  boxClassification.append(headerClassification, bodyClassification, footerClassification)
+  boxClassification.append(headerClassification, bodyClassification, footerClassification, btnCloseClassification)
 
   location.append(boxClassification)
   classificationBoxId += 1
+}
+
+function deleteClassification() {
+  // TODO
+}
+
+function inicializarClassificationPadrao() {
+  createClassification("Tecnologias")
+  createClassification("Impactos")
+  createClassification("Oportunidades")
 }
 
 let indiceDownloadTreemap = 0
@@ -221,8 +237,8 @@ function printResult() {
     let conteudos = elem.childNodes[1].childNodes
 
     conteudos.forEach((elem) => {
-      let texto = elem.childNodes[1].innerText
-      let quantidade = elem.childNodes[3].innerText
+      let texto = elem.childNodes[0].innerText // Pode quebrar (antigo valor: 1)
+      let quantidade = elem.childNodes[1].innerText // Pode quebrar (antigo valor: 3)
       let addValores = [texto, quantidade]
       valores.push(addValores)
     })
@@ -238,31 +254,6 @@ function printResult() {
   return listaValores
 }
 
-function generateZIP() {
-  console.log('TEST')
-  var zip = new JSZip()
-  var count = 0
-  var zipFilename = "Pictures.zip"
-
-  links.forEach(function (url, i) {
-    var filename = links[i]
-    filename = filename.replace(/[\/\*\|\:\<\>\?\"\\]/gi, '').replace("httpsi.imgur.com", "")
-    // loading a file and add it in a zip file
-    JSZipUtils.getBinaryContent(url, function (err, data) {
-      if (err) {
-        throw err // or handle the error
-      }
-      zip.file(filename, data, { binary: true })
-      count++
-      if (count == links.length) {
-        zip.generateAsync({ type: 'blob' }).then(function (content) {
-          saveAs(content, zipFilename)
-        })
-      }
-    })
-  })
-}
-
 function baixarGraficos() {
   alert("Aguarde. Todos os TreeMaps serão baixados individualmente.")
   Highcharts.charts.forEach(chart => {
@@ -271,7 +262,7 @@ function baixarGraficos() {
 }
 
 function mostrarGraficoTreemapDownload(nomeClassificacao, objetosTreemap) {
-  Highcharts.chart('graficoTreemapDownload', {
+  let graficoTreemap = Highcharts.chart('graficoTreemapDownload', {
     plotOptions: {
       treemap: {
         stacking: 'normal',
@@ -302,10 +293,20 @@ function parseDados(resultados) {
 
   let elem = resultados[indiceDownloadTreemap]
 
-  nomeClassificacao = elem['Classificação']
+  try {
+    nomeClassificacao = elem['Classificação']
+  }
+  catch {
+    // Por algum motivo em certas ocasiões o nome da classificação fica vazio, vamos então retornar silenciosamente como se nada tivesse acontecido
+    // Funcionalmente não há problemas
+    return ""
+  }
   for (let i = 0; i < elem['Termos'].length; i++) {
     objetosTreemap.push({ name: elem['Termos'][i][0], value: parseInt(elem['Termos'][i][1]), colorValue: parseInt(elem['Termos'][i][1]) })
   }
+
+  let indicador = document.querySelector("#counterTreemap")
+  indicador.innerText = `${indiceDownloadTreemap+1}/${resultados.length}`
 
   mostrarGraficoTreemapDownload(nomeClassificacao, objetosTreemap)
 }
@@ -363,8 +364,8 @@ async function efetuarBusca() {
 }
 
 function buscarToken(){
-  let token = document.querySelector("#consultaToken")
-  window.location.pathname = '/result?token=' + token
+  let token = document.querySelector("#id-search-restore").value
+  window.location = "/result?token=" + token
 }
 
 function retornarQueryDoNavegador(name){
@@ -377,20 +378,124 @@ function retornarTodosOsDadosDePesquisa() {
   document.querySelector("#token-busca").innerHTML = token
 
   if (token) {
-    resultadoBuscaEmPromisse = realizarConsulta(token)
-    resultadoBuscaEmPromisse.then((dados) => {
-      if (dados.resposta){
-        console.log(dados.resposta)
-        alert(dados.resposta)
+    resultadoBuscaEmPromise = realizarConsulta(token) 
+    resultadoBuscaEmPromise.then((dados) => {
+      if (dados['resposta']){
+        exibirModal() 
+        atualizarModal()
       }
       else {
-        temp = dados // TODO: Remover, atribui dados a uma variável para testes
+        dadosTreemap = dados // TODO: Mudar futuramente
         popularPainelAnos(dados)
         popularPainelNgramas(dados)
         popularPainelSubjects(dados)
+        popularGraficoLinha(dados)
+        inicializarClassificationPadrao()
       } 
     })
   }
+}
+
+// Função para mostrar o gráfico de artigos por ano - gráfico de linha
+function mostrarGraficoLinha(vetorDadosAno) {
+  Highcharts.chart("graficoLinha", {
+    title: {
+      text: "Distribuição de Artigos por Ano",
+    },
+
+    subtitle: {
+      text: 'Fontes: <a href="" target="_blank">ScienceDirect, SpringerLink</a>', // TODO: Linkar as fontes de acordo com a seleção
+    },
+
+    yAxis: {
+      title: {
+        text: "Quantidade de Artigos",
+      },
+    },
+
+    xAxis: {
+      tickInterval: 1,
+      labels: {
+        enabled: true,
+        formatter: function () { return vetorDadosAno[this.value][0]; },
+      }
+    },
+
+    legend: {
+      layout: "vertical",
+      align: "center",
+      verticalAlign: "bottom",
+    },
+
+    plotOptions: {
+      series: {
+        label: {
+          connectorAllowed: false,
+        },
+      },
+    },
+
+    series: [
+      {
+        name: "Artigos",
+        data: vetorDadosAno,
+      },
+    ],
+
+    responsive: {
+      rules: [
+        {
+          condition: {
+            maxWidth: 500,
+          },
+          chartOptions: {
+            legend: {
+              layout: "horizontal",
+              align: "center",
+              verticalAlign: "bottom",
+            },
+          },
+        },
+      ],
+    },
+  });
+}
+
+function mostrarGraficoTreemap() {
+  Highcharts.chart('graficoTreemap', {
+    plotOptions: {
+      treemap: {
+        stacking: 'normal',
+        cropThreshold: 10,
+        dataGrouping: {
+          enabled: true
+        }
+      }
+    },
+    colorAxis: {
+      minColor: '#FFFFFF',
+      maxColor: Highcharts.getOptions().colors[0]
+    },
+    series: [{
+      type: 'treemap',
+      layoutAlgorithm: 'squarified',
+      data: setTermosTreemap()
+    }],
+    title: {
+      text: 'Termos mais relevantes'
+    }
+  });
+}
+
+function popularGraficoLinha(dados){
+  let vetorDadosAno = [];
+
+  // Coloca os dados de artigos/ano no vetorDadosAno
+  for (let i = 0; i < dados['total_anos'].length; i++) {
+    vetorDadosAno.push([dados['total_anos'][i][0], dados['total_anos'][i][1]])
+  }
+
+  mostrarGraficoLinha(vetorDadosAno)
 }
 
 async function realizarConsulta(tokenPesquisa) {
@@ -400,4 +505,52 @@ async function realizarConsulta(tokenPesquisa) {
 
 async function retornarQualquerJsonEmPromise(link) {
   return await fetch(link).then((response) => {return response.json()})
+}
+
+function setTermosTreemap() {
+  let vetorTermosTreemap = [];
+
+  for (let i = 0; i < dadosTreemap['total_assuntos'].length; i++) {
+    vetorTermosTreemap.push(entradaTreemap(dadosTreemap['total_assuntos'][i]));
+  }
+
+  // Coloca os ngramas no vetor de termos Treemap
+  dadosTreemap['resultado_ngramas'].forEach((termo, qtd) => {
+    vetorTermosTreemap.push(entradaTreemap([termo[0][0] + " " + termo[0][1], qtd, qtd]))
+  })
+
+  return vetorTermosTreemap;
+}
+
+function entradaTreemap(termoDados) {
+  let termo = termoDados[0]
+  let valor = termoDados[1]
+  return { name: termo, value: valor, colorValue: valor };
+}
+
+function exibirModal() { // --> Apenas <-- será exibido no promise de uma resposta e NÃO de maneira completamente automática!!
+  modalBuscaPendente = new bootstrap.Modal(document.querySelector("#modal-busca-pendente"), {})
+  modalBuscaPendente.show()
+}
+
+function esconderModal() {
+  modalBuscaPendente.hide()
+}
+
+function atualizarModal() {
+  let textoModal = document.querySelector("#texto-modal")
+  let secs = 30
+  setInterval(() => {
+    textoModal.innerHTML = `Aguarde ` + secs + ` segundos`
+    if (secs >= 1) {
+      secs -= 1
+    } else {
+      textoModal.innerHTML = `Tentando novamente...`
+      location.reload()
+    }
+  }, 1000)
+}
+
+function recarregarBusca() {
+  location.reload()
 }

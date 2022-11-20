@@ -1,7 +1,7 @@
 {% extends 'layout/layout.html' %} {% block title %} Resultado {% endblock %} {%
 include 'layout/header.html' %} {% block content%}
 <script>
-window.addEventListener('load', function () {
+window.addEventListener('load', function() {
   retornarTodosOsDadosDePesquisa()
 }) 
 </script>
@@ -11,8 +11,8 @@ window.addEventListener('load', function () {
       <a href="#" class="list-group-item list-group-item-action" style="background-color: #ffc107" aria-current="true">
         <div class="d-flex w-100 justify-content-between">
           <h5 class="mb-1" style="font-size: 15px">
-            O termo de busca foi: 
-            <h5 id="token-busca"></h5>
+            O token da busca realizada foi: 
+            <nobr style="font-weight: bold;"id="token-busca"></nobr>
           </h5>
         </div>
         <p class="mb-2" style="font-size: 15px">
@@ -52,7 +52,7 @@ window.addEventListener('load', function () {
     <h1 style="color: white">N-gramas:</h1>
     <div style="height: calc(50vh - 50px); overflow-y: auto; background-color: rgba(255, 255, 255, 0.2);">
       <div class="border border-round border-secondary p-1">
-        <div style="margin: 0 auto; background-color: rgba(255, 255, 255, 0.2)" id="location-ngramas" ondrop="drop(event)"
+        <div style="margin: 0 auto; background-color: rgba(255, 255, 255, 0.2)" id="local-ngramas" ondrop="drop(event)"
           ondragover="allowDrop(event)">
           <br style="display: none"> <!-- Não remover em hipótese alguma, irá quebrar a página -->
         </div>
@@ -62,20 +62,9 @@ window.addEventListener('load', function () {
     <h1 style="color: white">Assuntos (Subjects):</h1>
     <div class="mt-3" style="height: calc(40vh - 50px); overflow-y: auto; background-color: rgba(255, 255, 255, 0.2);">
       <div class="border border-round border-secondary p-1">
-        <div style="margin: 0 auto; background-color: rgba(255, 255, 255, 0.2)" id="location-subjects" ondrop="drop(event)"
+        <div style="margin: 0 auto; background-color: rgba(255, 255, 255, 0.2)" id="local-subjects" ondrop="drop(event)"
           ondragover="allowDrop(event)">
           <br style="display: none"> <!-- Não remover... -->
-          
-
-          {# {% for assunto in total_assuntos %}
-          <button type="button" class="btn btn-light position-relative mt-3 mx-2 p-1" style="font-size: 15px"
-            id="assunto_{{loop.index}}" draggable="true" ondragstart="drag(event)">
-            {{ assunto[0] }}
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
-              {{ assunto[1] }}
-            </span>
-          </button>
-          {% endfor %} #}
         </div>
       </div>
     </div>
@@ -85,16 +74,12 @@ window.addEventListener('load', function () {
       <button class="grid-item btn btn-warning" id="btn-classification" onclick="createClassification()">
         Criar Classificação
       </button>
-      <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modal-termos-comuns">
+      <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modal-termos-comuns" onclick="mostrarGraficoTreemap()">
         Ver termos mais comuns
       </button>
       <button type="button" class="btn btn-warning" data-bs-toggle="modal"
         data-bs-target="#modal-download-classificacoes" id="btn-download" onclick="parseDados(printResult())">
         Download
-      </button>
-      <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-        data-bs-target="#modal-download-classificacoes" id="btn-download" onclick="baixarGraficos()">
-        Download 2
       </button>
     </span>
   </div>
@@ -129,7 +114,7 @@ window.addEventListener('load', function () {
     <!-- Modal -->
     <div class="modal fade" style="backdrop-filter: blur(5px)" id="modal-download-classificacoes" tabindex="-1"
       aria-labelledby="label-modal-classificacoes" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="label-modal-classificacoes">Treemap das Classificações</h1>
@@ -141,10 +126,34 @@ window.addEventListener('load', function () {
             </figure>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" onclick="anteriorGraficoTreemapDL()">
-              ◀</button>
-                <button type="button" class="btn btn-primary" onclick="proximoGraficoTreemapDL()">▶</button>
-                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">OK</button>
+            <button type="button" style="margin-right: 28em" class="btn btn-primary">Baixar treemap</button>
+            <button type="button" class="btn btn-primary" onclick="anteriorGraficoTreemapDL()">◀</button>
+            <nobr id="counterTreemap">X/X</nobr>
+            <button type="button" class="btn btn-primary" onclick="proximoGraficoTreemapDL()">▶</button>
+            <button type="button" class="btn btn-warning" data-bs-dismiss="modal">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Fim do modal -->
+  </div>
+
+  <div id="janela-busca-pendente">
+    <!-- Modal -->
+    <div class="modal fade" style="backdrop-filter: blur(5px)" id="modal-busca-pendente" tabindex="-1"
+      aria-labelledby="label-modal-busca-pendente" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="label-modal-busca-pendente">Busca Pendente </h1>
+            <button type="button" class="btn-close" onclick="esconderModal()" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="texto-modal">
+            <br style="display: none;">
+            Efetuando busca...
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-warning" onclick="recarregarBusca()">Recarregar</button>
           </div>
         </div>
       </div>
