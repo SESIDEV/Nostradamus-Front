@@ -3,12 +3,13 @@ let modalBuscaPendente; // Variável para o modal da busca pendente
 
 
 function popularPainelAnos(dados) {
+  dados = dados.sort()
   let locationAno = document.querySelector("#location-anos")
   let buttonAno;
   let spanNumero = document.createElement("span")
 
   let idx = 0;
-  dados['total_anos'].forEach((ano) => {
+  dados.forEach((ano) => {
     buttonAno = document.createElement("button")
     buttonAno.setAttribute("type", "button")
     buttonAno.classList.add("btn", "btn-warning", "position-relative", "mt-3", "mx-2", "p-1")
@@ -391,7 +392,7 @@ function retornarTodosOsDadosDePesquisa() {
       }
       else {
         dadosTreemap = dados // TODO: Mudar futuramente
-        popularPainelAnos(dados)
+        popularPainelAnos(dados['total_anos'])
         popularPainelNgramas(dados)
         popularPainelSubjects(dados)
         popularGraficoLinha(dados)
