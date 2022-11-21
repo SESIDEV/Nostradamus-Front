@@ -539,7 +539,10 @@ function esconderModal() {
 
 function atualizarModal() {
   let textoModal = document.querySelector("#texto-modal")
-  let secs = 600
+  let textoTitle = document.querySelector("#label-modal-busca-pendente")
+  let token = retornarQueryDoNavegador('token')
+  textoTitle.innerHTML = 'Busca Pendente [' + token + ']'
+  let secs = 60
   setInterval(() => {
     textoModal.innerHTML = `Aguarde ` + secs + ` segundos`
     if (secs >= 1) {
