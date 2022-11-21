@@ -4,11 +4,12 @@ let modalBuscaPendente; // Variável para o modal da busca pendente
 
 function popularPainelAnos(dados) {
   let locationAno = document.querySelector("#location-anos")
-  let buttonAno = document.createElement("button")
+  let buttonAno;
   let spanNumero = document.createElement("span")
 
   let idx = 0;
   dados['total_anos'].forEach((ano) => {
+    buttonAno = document.createElement("button")
     buttonAno.setAttribute("type", "button")
     buttonAno.classList.add("btn", "btn-warning", "position-relative", "mt-3", "mx-2", "p-1")
     buttonAno.setAttribute("style", "font-size: 15px")
