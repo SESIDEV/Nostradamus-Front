@@ -16,9 +16,9 @@ window.addEventListener('load', function() {
           </h5>
         </div>
         <p class="mb-2" style="font-size: 15px">
-          Classifique o resultado ou faça uma nova busca.
+          Classifique o resultado. <!-- ou faça uma nova busca. -->
         </p>
-        <small style="font-size: 15px">
+        <!-- <small style="font-size: 15px">
           <div class="input-group">
             <form style="align-items: center; display: flex">
               <input type="text" class="form-control" aria-describedby="button-addon2"
@@ -29,7 +29,7 @@ window.addEventListener('load', function() {
               </button>
             </form>
           </div>
-        </small>
+        </small> -->
       </a>
 
       <a href="#" class="list-group-item list-group-item-action mt-3">
@@ -79,7 +79,7 @@ window.addEventListener('load', function() {
       </button>
       <button type="button" class="btn btn-warning" data-bs-toggle="modal"
         data-bs-target="#modal-download-classificacoes" id="btn-download" onclick="parseDados(printResult())">
-        Gerar Treemap
+        Gerar Treemap das Classificações
       </button>
     </span>
   </div>
@@ -155,13 +155,12 @@ window.addEventListener('load', function() {
           <br>
           <div class="modal-footer">
             Ou salve o código da sua busca e efetue a consulta em outro momento.
-            <!--<button type="button" class="btn btn-warning" onclick="recarregarBusca()">Recarregar</button>-->
+            <button type="button" class="btn btn-warning" onclick="recarregarBusca()">Recarregar</button>
           </div>
         </div>
       </div>
     </div>
     <!-- Fim do modal -->
   </div>
-
 </div>
 {% endblock %}

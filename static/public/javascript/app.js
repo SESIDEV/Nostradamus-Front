@@ -137,8 +137,12 @@ function show_anything(evento) {
     pre_loader.classList.add("show-anything")
   }
 }
-const btn = document.querySelector("#button-addon2")
-btn.addEventListener("click", show_anything, false)
+try {
+  const btn = document.querySelector("#button-addon2")
+  btn.addEventListener("click", show_anything, false)
+} catch {
+  console.log("No button...")
+}
 
 //arrasta e solta JS
 function allowDrop(ev) {
