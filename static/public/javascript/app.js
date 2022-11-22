@@ -1,6 +1,7 @@
 let dadosTreemap; // Temporário para popular o treemap de termos
 let modalBuscaPendente; // Variável para o modal da busca pendente
 
+// COMENTÁRIO PARA FAZER DEPLOY
 
 function popularPainelAnos(dados) {
   dados = dados.sort()
