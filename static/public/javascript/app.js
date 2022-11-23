@@ -549,7 +549,7 @@ function atualizarModal() {
   let textoTitle = document.querySelector("#label-modal-busca-pendente")
   let token = retornarQueryDoNavegador('token')
   textoTitle.innerHTML = 'Busca Pendente [' + token + ']'
-  let secs = 60
+  let secs = 15
   setInterval(() => {
     textoModal.innerHTML = `Aguarde ` + secs + ` segundos`
     if (secs >= 1) {
